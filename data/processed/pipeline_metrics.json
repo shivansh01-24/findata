@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-09-11T15:58:35.249152",
+  "counts": {
+    "raw_upi": 20400,
+    "trusted_upi": 20000,
+    "raw_kyc": 36400,
+    "trusted_customers": 28920,
+    "raw_merchants": 6210,
+    "trusted_merchants": 4343,
+    "raw_chargebacks": 2884,
+    "trusted_chargebacks": 2800
+  },
+  "customer_resolution": {
+    "SINGLETON": 22632,
+    "CONFLICTING_RECORD": 5863,
+    "FORMATTING_DUPLICATE": 251,
+    "EXACT_DUPLICATE": 174
+  },
+  "merchant_resolution": {
+    "SINGLETON": 2931,
+    "CONFLICTING_MERCHANT_RECORD": 1310,
+    "FORMATTING_DUPLICATE": 97,
+    "EXACT_DUPLICATE": 5
+  },
+  "transaction_status": {
+    "SUCCESS": 17053,
+    "FAILED": 1955,
+    "PENDING": 992
+  },
+  "chargeback_linkage": {
+    "linked_to_upi": 2607,
+    "orphan_chargebacks": 193,
+    "amounts_imputed": 163
+  }
+}
