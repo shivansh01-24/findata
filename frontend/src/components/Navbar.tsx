@@ -6,6 +6,7 @@ import {
   Store, 
   Users, 
   Database, 
+  Sliders,
   Bot, 
   Key, 
   CheckCircle2, 
@@ -34,6 +35,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'rings', label: 'Fraud Ring Explorer', icon: Network },
     { id: 'merchants', label: 'Merchant Risk Center', icon: Store },
     { id: 'customers', label: 'Customer / Identity Risk', icon: Users },
+    { id: 'simulator', label: 'Risk Simulator', icon: Sliders },
     { id: 'data_rescue', label: 'Data Rescue & Audit', icon: Database },
   ]
 

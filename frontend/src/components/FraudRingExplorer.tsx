@@ -11,9 +11,11 @@ import {
   Layers, 
   ExternalLink, 
   CheckCircle2, 
-  Info 
+  Info,
+  FileText 
 } from 'lucide-react'
 import { NetworkGraph, GraphNode } from './NetworkGraph'
+import { STRReportModal } from './STRReportModal'
 
 export const FraudRingExplorer: React.FC = () => {
   const [rings, setRings] = useState<any[]>([])
@@ -24,6 +26,27 @@ export const FraudRingExplorer: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [graphLoading, setGraphLoading] = useState(false)
+
+  // STR Report Modal State
+  const [isStrModalOpen, setIsStrModalOpen] = useState(false)
+  const [strReportData, setStrReportData] = useState<any>(null)
+  const [isStrLoading, setIsStrLoading] = useState(false)
+
+  const handleExportRingSTR = (ringId?: string) => {
+    if (!ringId) return
+    setIsStrModalOpen(true)
+    setIsStrLoading(true)
+    fetch(`/api/reports/str/ring/${ringId}`)
+      .then(res => res.json())
+      .then(data => {
+        setStrReportData(data)
+        setIsStrLoading(false)
+      })
+      .catch(err => {
+        console.error('Error fetching ring STR:', err)
+        setIsStrLoading(false)
+      })
+  }
 
   // 1. Fetch all rings
   useEffect(() => {
@@ -184,9 +207,18 @@ export const FraudRingExplorer: React.FC = () => {
                   Interactive topology map. Click any node to inspect entity dossier and transactions.
                 </p>
               </div>
-              <span className="text-xs text-slate-400">
-                {graphData?.nodes?.length || 0} nodes | {graphData?.edges?.length || 0} edges
-              </span>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => handleExportRingSTR(currentRing?.ring_id)}
+                  className="flex items-center gap-1.5 rounded-xl bg-red-600/20 border border-red-500/30 px-3 py-1.5 text-xs font-bold text-red-400 hover:bg-red-600/30 transition-all shadow-md"
+                >
+                  <FileText className="h-3.5 w-3.5" />
+                  <span>Export FIU-IND STR</span>
+                </button>
+                <span className="text-xs text-slate-400">
+                  {graphData?.nodes?.length || 0} nodes | {graphData?.edges?.length || 0} edges
+                </span>
+              </div>
             </div>
 
             {graphLoading ? (
@@ -259,6 +291,14 @@ export const FraudRingExplorer: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* FIU-IND STR Report Modal */}
+      <STRReportModal
+        isOpen={isStrModalOpen}
+        onClose={() => setIsStrModalOpen(false)}
+        reportData={strReportData}
+        isLoading={isStrLoading}
+      />
     </div>
   )
 }

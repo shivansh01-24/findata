@@ -4,6 +4,7 @@ import { ExecutiveOverview } from './components/ExecutiveOverview'
 import { FraudRingExplorer } from './components/FraudRingExplorer'
 import { MerchantRiskCenter } from './components/MerchantRiskCenter'
 import { CustomerRiskCenter } from './components/CustomerRiskCenter'
+import { RiskSimulator } from './components/RiskSimulator'
 import { DataRescueAudit } from './components/DataRescueAudit'
 import { AgentDrawer } from './components/AgentDrawer'
 import { KeyModal } from './components/KeyModal'
@@ -43,6 +44,7 @@ export function App() {
         {activeTab === 'rings' && <FraudRingExplorer />}
         {activeTab === 'merchants' && <MerchantRiskCenter />}
         {activeTab === 'customers' && <CustomerRiskCenter />}
+        {activeTab === 'simulator' && <RiskSimulator />}
         {activeTab === 'data_rescue' && <DataRescueAudit />}
       </main>
 

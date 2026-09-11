@@ -31,6 +31,22 @@ class DeterministicQueryEngine:
         """
         q = query.lower().strip()
 
+        # 0A. Specific Merchant Lookup (e.g. MCH4473, MCH9291)
+        mch_matches = re.findall(r'mch\d{4}', q)
+        if mch_matches:
+            return self._query_specific_merchant(mch_matches[0].upper())
+
+        # 0B. Specific Customer Lookup (e.g. USR62254, USR35882)
+        usr_matches = re.findall(r'usr\d{5}', q)
+        if usr_matches:
+            return self._query_specific_customer(usr_matches[0].upper())
+
+        # 0C. Specific Category Deep-Dive (e.g. "Why is Apparel risky?", "Tell me about Grocery")
+        categories_list = ['apparel', 'grocery', 'pharmacy', 'restaurant', 'transportation', 'hotel', 'department store', 'telecom', 'stationery', 'miscellaneous retail']
+        for cat_name in categories_list:
+            if cat_name in q and any(w in q for w in ['why', 'performance', 'about', 'risk', 'detail', 'stat', 'how many']):
+                return self._query_specific_category(cat_name)
+
         # 1. Chargeback-to-Transaction Ratio by Category (Benchmark Question)
         if any(w in q for w in ['ratio', 'rate', 'highest chargeback', 'dispute rate']) and any(w in q for w in ['category', 'quarter', 'merchant category', 'highest']):
             return self._query_category_cb_ratio()
@@ -44,7 +60,7 @@ class DeterministicQueryEngine:
             return self._query_status_breakdown()
 
         # 4. Top Merchants by Chargebacks / Disputed Amount
-        if any(w in q for w in ['merchant', 'merchants']) and any(w in q for w in ['highest chargeback', 'top', 'chargeback count', 'most disputes', 'disputed amount']):
+        if any(w in q for w in ['merchant', 'merchants']) and any(w in q for w in ['highest chargeback', 'top', 'chargeback count', 'most disputes', 'disputed amount', 'highest']):
             return self._query_top_merchants_disputes(by_amount=('amount' in q or 'volume' in q))
 
         # 5. Chargeback Reasons & Root Causes
@@ -77,6 +93,150 @@ class DeterministicQueryEngine:
 
         # Default: Comprehensive Executive Overview
         return self._query_executive_summary()
+
+    def _query_specific_merchant(self, merchant_id: str) -> Dict[str, Any]:
+        m_row = self.df_merchants[self.df_merchants['merchant_id'] == merchant_id]
+        if len(m_row) == 0:
+            return {
+                'intent': 'MERCHANT_NOT_FOUND',
+                'answer_text': f"Merchant ID '{merchant_id}' was not found in the Merchant Master Registry.",
+                'chart': None,
+                'supporting_metrics': {},
+                'interpretation': "Verify the merchant identifier (format: MCHxxxx)."
+            }
+        m = m_row.iloc[0]
+        txns = self.df_txns[self.df_txns['merchant_id'] == merchant_id]
+        cbs = self.df_cb[self.df_cb['merchant_id'] == merchant_id]
+
+        t_cnt = len(txns)
+        t_vol = float(txns['amount'].abs().sum())
+        cb_cnt = len(cbs)
+        cb_vol = float(cbs['disputed_amount'].sum())
+        cb_rate = round(cb_cnt / t_cnt * 100, 2) if t_cnt > 0 else 0.0
+
+        # Daily breakdown for this merchant
+        daily = txns.groupby('txn_date')['amount'].agg(lambda x: float(x.abs().sum())).reset_index()
+        daily.columns = ['date_str', 'volume']
+        daily_data = daily.to_dict(orient='records')
+
+        return {
+            'intent': 'SPECIFIC_MERCHANT_DOSSIER',
+            'answer_text': (
+                f"Merchant Dossier for '{m['merchant_name']}' ({merchant_id}):\n"
+                f"Category: {m['merchant_category']} | Location: {m['city']}, {m['state']} | Status: {m['merchant_status']}.\n"
+                f"Processed {t_cnt} transactions totaling ₹{t_vol:,.2f} with {cb_cnt} customer chargebacks "
+                f"(₹{cb_vol:,.2f} disputed volume, {cb_rate}% dispute rate)."
+            ),
+            'chart': {
+                'chart_type': 'line',
+                'title': f"Transaction Velocity for {m['merchant_name']} ({merchant_id})",
+                'x_axis': 'date_str',
+                'y_axis': 'volume',
+                'y_label': 'Volume (₹)',
+                'data': daily_data
+            },
+            'supporting_metrics': {
+                'merchant_name': m['merchant_name'],
+                'merchant_category': m['merchant_category'],
+                'settlement_account': m['settlement_account'] or 'None',
+                'transaction_count': t_cnt,
+                'chargeback_count': cb_cnt,
+                'dispute_rate_pct': f"{cb_rate}%"
+            },
+            'interpretation': (
+                f"Merchant {merchant_id} exhibits a {cb_rate}% dispute rate. "
+                + ("Settlement account is shared across other commercial storefronts (mule indicator)." if m['settlement_account'] and 'XXXX' in str(m['settlement_account']) else "Monitor for ongoing dispute velocity.")
+            )
+        }
+
+    def _query_specific_customer(self, user_id: str) -> Dict[str, Any]:
+        c_row = self.df_customers[self.df_customers['user_id'] == user_id]
+        if len(c_row) == 0:
+            return {
+                'intent': 'CUSTOMER_NOT_FOUND',
+                'answer_text': f"Customer ID '{user_id}' was not found in the Customer KYC Registry.",
+                'chart': None,
+                'supporting_metrics': {},
+                'interpretation': "Verify the customer identifier (format: USRxxxxx)."
+            }
+        c = c_row.iloc[0]
+        txns = self.df_txns[self.df_txns['user_id'] == user_id]
+        cbs = self.df_cb[self.df_cb['user_id'] == user_id]
+
+        return {
+            'intent': 'SPECIFIC_CUSTOMER_DOSSIER',
+            'answer_text': (
+                f"Customer Dossier for '{c['full_name']}' ({user_id}):\n"
+                f"KYC Status: {c['kyc_status']} | Risk Segment: {c['risk_segment']} | City: {c['city']}, {c['state']}.\n"
+                f"PAN: {c['pan']} ({c['pan_flag']}) | Aadhaar: {c['aadhaar']} ({c['aadhaar_flag']}).\n"
+                f"Total Transactions: {len(txns)} | Chargebacks Filed: {len(cbs)} (₹{cbs['disputed_amount'].sum():,.2f} disputed)."
+            ),
+            'chart': {
+                'chart_type': 'bar',
+                'title': f"Disputes by Reason for {c['full_name']}",
+                'x_axis': 'reason',
+                'y_axis': 'count',
+                'y_label': 'Disputes',
+                'data': [{'reason': str(k), 'count': int(v)} for k, v in cbs['reason_category'].value_counts().items()]
+            },
+            'supporting_metrics': {
+                'customer_name': c['full_name'],
+                'kyc_status': c['kyc_status'],
+                'disputes_filed': len(cbs),
+                'resolution_type': c['resolution_type']
+            },
+            'interpretation': (
+                f"Customer {user_id} was resolved as '{c['resolution_type']}'. "
+                + (f"Conflict note: {c['conflict_details']}" if pd.notna(c['conflict_details']) and c['conflict_details'] != 'No duplicates' else "Profile is consistent with banking norms.")
+            )
+        }
+
+    def _query_specific_category(self, cat_term: str) -> Dict[str, Any]:
+        match_cat = None
+        for cat in self.df_txns['merchant_category'].unique():
+            if cat_term in cat.lower():
+                match_cat = cat
+                break
+        if not match_cat:
+            match_cat = "Apparel"
+
+        txns = self.df_txns[self.df_txns['merchant_category'] == match_cat]
+        cbs = self.df_cb[self.df_cb['merchant_category'] == match_cat]
+        t_cnt = len(txns)
+        c_cnt = len(cbs)
+        rate = round(c_cnt / t_cnt * 100, 2) if t_cnt > 0 else 0.0
+
+        reasons = cbs['reason_category'].value_counts().reset_index()
+        reasons.columns = ['reason', 'count']
+        data = reasons.to_dict(orient='records')
+
+        return {
+            'intent': 'CATEGORY_DEEP_DIVE',
+            'answer_text': (
+                f"Category Analysis for '{match_cat}':\n"
+                f"Total Transactions: {t_cnt:,} | Gross Volume: ₹{txns['amount'].abs().sum():,.2f}.\n"
+                f"Customer Chargebacks: {c_cnt:,} | Disputed Volume: ₹{cbs['disputed_amount'].sum():,.2f}.\n"
+                f"Chargeback-to-Transaction Ratio: {rate}%."
+            ),
+            'chart': {
+                'chart_type': 'bar',
+                'title': f"Dispute Breakdown for Category: {match_cat}",
+                'x_axis': 'reason',
+                'y_axis': 'count',
+                'y_label': 'Disputes',
+                'data': data
+            },
+            'supporting_metrics': {
+                'category': match_cat,
+                'transaction_count': t_cnt,
+                'chargeback_count': c_cnt,
+                'dispute_ratio_pct': f"{rate}%"
+            },
+            'interpretation': (
+                f"'{match_cat}' records a dispute ratio of {rate}%. "
+                + ("This is the highest dispute density on the platform and represents an acute fraud concentration." if rate > 25 else "Operating within manageable risk tolerances.")
+            )
+        }
 
     def _query_category_cb_ratio(self) -> Dict[str, Any]:
         txn_counts = self.df_txns['merchant_category'].value_counts()

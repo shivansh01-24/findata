@@ -89,9 +89,47 @@ def run_smoke_test():
     assert res.status_code == 200
     assert "<!doctype html>" in res.text.lower()
     print(" -> OK! Single Page Application served successfully by FastAPI!")
+
+    # 10. FIU-IND STR Dossier Generation (Rings)
+    print("\n[10] Testing FIU-IND STR Generation (/api/reports/str/ring/RING-SETTLE-001)...")
+    res = client.get("/api/reports/str/ring/RING-SETTLE-001")
+    assert res.status_code == 200
+    str_data = res.json()
+    assert "report_metadata" in str_data
+    assert "FIU-IND" in str_data['report_metadata']['report_reference']
+    print(f" -> OK! Generated Dossier: {str_data['report_metadata']['report_reference']} ({len(str_data['markdown_dossier'])} chars)")
+
+    # 11. Curated Data Rescue Cases
+    print("\n[11] Testing Curated Data Rescue Cases (/api/audit/curated-cases)...")
+    res = client.get("/api/audit/curated-cases")
+    assert res.status_code == 200
+    cases = res.json()
+    assert len(cases) >= 6
+    print(f" -> OK! Retrieved {len(cases)} benchmark demonstration cases (e.g. {cases[0]['entity_id']}: {cases[0]['curation_tag']})")
+
+    # 12. Interactive Entity Search & Side-by-Side Diff
+    print("\n[12] Testing Live Audit Entity Diff (/api/audit/entity/MERCHANT/MCH7912)...")
+    res = client.get("/api/audit/entity/MERCHANT/MCH7912")
+    assert res.status_code == 200
+    diff_data = res.json()
+    assert diff_data['entity_id'] == 'MCH7912'
+    assert len(diff_data['raw_records']) == 6
+    print(f" -> OK! Reconciled {len(diff_data['raw_records'])} raw rows into golden merchant with {len(diff_data['attribute_diffs'])} diff attributes")
+
+    # 13. Risk Policy & Threshold Simulator
+    print("\n[13] Testing Risk Policy Simulator (/api/analytics/simulate-policy)...")
+    res = client.post("/api/analytics/simulate-policy", json={
+        "chargeback_threshold_pct": 18.0,
+        "ticket_multiplier": 1.9,
+        "mule_sharing_threshold": 2
+    })
+    assert res.status_code == 200
+    sim_res = res.json()
+    assert "simulated_metrics" in sim_res
+    print(f" -> OK! Simulation completed: {sim_res['simulated_metrics']['flagged_merchants']} merchants flagged | INR {sim_res['simulated_metrics']['dispute_volume_contained']:,.2f} dispute volume contained")
     
     print("\n" + "=" * 60)
-    print("ALL SMOKE TESTS PASSED WITH 100% SUCCESS!")
+    print("ALL 13 SMOKE TESTS PASSED WITH 100% SUCCESS!")
     print("=" * 60)
 
 if __name__ == "__main__":

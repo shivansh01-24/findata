@@ -12,6 +12,7 @@ import {
   Clock, 
   X 
 } from 'lucide-react'
+import { STRReportModal } from './STRReportModal'
 
 export const MerchantRiskCenter: React.FC = () => {
   const [merchants, setMerchants] = useState<any[]>([])
@@ -21,6 +22,26 @@ export const MerchantRiskCenter: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('ALL')
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+
+  // STR Report Modal State
+  const [isStrModalOpen, setIsStrModalOpen] = useState(false)
+  const [strReportData, setStrReportData] = useState<any>(null)
+  const [isStrLoading, setIsStrLoading] = useState(false)
+
+  const handleExportMerchantSTR = (merchantId: string) => {
+    setIsStrModalOpen(true)
+    setIsStrLoading(true)
+    fetch(`/api/reports/str/merchant/${merchantId}`)
+      .then(res => res.json())
+      .then(data => {
+        setStrReportData(data)
+        setIsStrLoading(false)
+      })
+      .catch(err => {
+        console.error('Error fetching merchant STR:', err)
+        setIsStrLoading(false)
+      })
+  }
 
   useEffect(() => {
     fetch('/api/analytics/merchants?limit=150')
@@ -233,19 +254,28 @@ export const MerchantRiskCenter: React.FC = () => {
               <X className="h-5 w-5" />
             </button>
 
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-600/20 text-purple-400 border border-purple-500/30">
-                <Store className="h-6 w-6" />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pr-8">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-600/20 text-purple-400 border border-purple-500/30">
+                  <Store className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <span>{selectedMerchant.merchant_name}</span>
+                    <span className="text-xs font-mono text-purple-400">({selectedMerchant.merchant_id})</span>
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    {selectedMerchant.merchant_category} • {selectedMerchant.business_type} • {selectedMerchant.city}, {selectedMerchant.state}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <span>{selectedMerchant.merchant_name}</span>
-                  <span className="text-xs font-mono text-purple-400">({selectedMerchant.merchant_id})</span>
-                </h3>
-                <p className="text-xs text-slate-400">
-                  {selectedMerchant.merchant_category} • {selectedMerchant.business_type} • {selectedMerchant.city}, {selectedMerchant.state}
-                </p>
-              </div>
+              <button
+                onClick={() => handleExportMerchantSTR(selectedMerchant.merchant_id)}
+                className="flex items-center gap-1.5 rounded-xl bg-red-600/20 border border-red-500/30 px-3 py-1.5 text-xs font-bold text-red-400 hover:bg-red-600/30 transition-all shadow-md self-start sm:self-center"
+              >
+                <FileText className="h-3.5 w-3.5" />
+                <span>Export FIU-IND STR</span>
+              </button>
             </div>
 
             {/* Investigation Rationale Box */}
@@ -311,6 +341,14 @@ export const MerchantRiskCenter: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* FIU-IND STR Report Modal */}
+      <STRReportModal
+        isOpen={isStrModalOpen}
+        onClose={() => setIsStrModalOpen(false)}
+        reportData={strReportData}
+        isLoading={isStrLoading}
+      />
     </div>
   )
 }

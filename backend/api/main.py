@@ -20,10 +20,14 @@ from backend.intelligence.fraud_rings import FraudRingEngine
 from backend.intelligence.merchant_risk import MerchantRiskEngine
 from backend.intelligence.customer_risk import CustomerRiskEngine
 from backend.intelligence.chargeback_analytics import ChargebackAnalyticsEngine
+from backend.pipeline.audit_service import AuditRescueService
+from backend.intelligence.fiu_str_generator import FiuStrGenerator
+from backend.intelligence.policy_simulator import PolicySimulatorEngine
 from backend.api.agent.domain_guard import validate_query_domain
 from backend.api.agent.deterministic_engine import DeterministicQueryEngine
 from backend.api.agent.openrouter_client import OpenRouterAgentClient
 
+DATA_RAW_DIR = os.path.join(ROOT_DIR, "data", "raw")
 DATA_PROC_DIR = os.path.join(ROOT_DIR, "data", "processed")
 
 # Initialize engines
@@ -31,6 +35,9 @@ fraud_engine = FraudRingEngine(DATA_PROC_DIR)
 merchant_engine = MerchantRiskEngine(DATA_PROC_DIR)
 customer_engine = CustomerRiskEngine(DATA_PROC_DIR)
 chargeback_engine = ChargebackAnalyticsEngine(DATA_PROC_DIR)
+audit_service = AuditRescueService(DATA_RAW_DIR, DATA_PROC_DIR)
+fiu_generator = FiuStrGenerator(DATA_PROC_DIR)
+policy_simulator = PolicySimulatorEngine(DATA_PROC_DIR)
 deterministic_engine = DeterministicQueryEngine(DATA_PROC_DIR)
 openrouter_client = OpenRouterAgentClient()
 
@@ -57,6 +64,13 @@ class AgentQueryRequest(BaseModel):
 
 class KeyUpdateRequest(BaseModel):
     api_key: str
+
+
+class PolicySimulateRequest(BaseModel):
+    chargeback_threshold_pct: float = 20.0
+    ticket_multiplier: float = 2.0
+    mule_sharing_threshold: int = 2
+    min_txns_evaluated: int = 3
 
 
 # -----------------------------------------------------------------------------
@@ -230,6 +244,56 @@ def get_data_quality_report():
         "profiling_report": report,
         "pipeline_metrics": metrics
     }
+
+
+@app.get("/api/audit/search")
+def search_audit_entities(
+    q: str = Query("", description="Query by ID, name, PAN, or settlement account"),
+    limit: int = Query(15, description="Max entities to return")
+):
+    return audit_service.search_entities(q, limit=limit)
+
+
+@app.get("/api/audit/entity/{entity_type}/{entity_id}")
+def get_audit_entity(entity_type: str, entity_id: str):
+    res = audit_service.get_entity_audit(entity_type, entity_id)
+    if not res:
+        raise HTTPException(status_code=404, detail=f"Entity '{entity_id}' not found in audit index")
+    return res
+
+
+@app.get("/api/audit/curated-cases")
+def get_curated_audit_cases():
+    return audit_service.get_curated_cases()
+
+
+# -----------------------------------------------------------------------------
+# FIU-IND REGULATORY STR DOSSIERS
+# -----------------------------------------------------------------------------
+
+@app.get("/api/reports/str/ring/{ring_id}")
+def get_ring_str_report(ring_id: str):
+    rep = fiu_generator.generate_ring_str(ring_id)
+    if not rep:
+        raise HTTPException(status_code=404, detail=f"Fraud ring '{ring_id}' not found")
+    return rep
+
+
+@app.get("/api/reports/str/merchant/{merchant_id}")
+def get_merchant_str_report(merchant_id: str):
+    rep = fiu_generator.generate_merchant_str(merchant_id)
+    if not rep:
+        raise HTTPException(status_code=404, detail=f"Merchant '{merchant_id}' not found")
+    return rep
+
+
+# -----------------------------------------------------------------------------
+# RISK POLICY & THRESHOLD SIMULATOR
+# -----------------------------------------------------------------------------
+
+@app.post("/api/analytics/simulate-policy")
+def simulate_risk_policy(payload: PolicySimulateRequest):
+    return policy_simulator.simulate(payload.model_dump())
 
 
 # -----------------------------------------------------------------------------
