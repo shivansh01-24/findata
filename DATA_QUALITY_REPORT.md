@@ -69,3 +69,26 @@ RAW VALUE  ──►  CANONICAL VALUE  ──►  VALIDATION STATUS  ──►  
 1. **Preservation over Deletion**: No data rows were silently deleted. Every record is retained and classified.
 2. **Auditability**: Every transformed field tracks its origin, transformation rule, and resolution confidence score.
 3. **Foreign Key Resilience**: Unlinked transactions and chargebacks are retained with explicit `ORPHAN` flags.
+
+---
+
+## 3. Trusted Analytical Baseline & Benchmark Category Ratios
+
+Post-rescue computation across the complete golden dataset (20,000 transactions and 2,800 validated chargebacks across Q1 2026):
+
+| Rank | Merchant Category | Transactions | Gross Volume (₹) | Chargebacks | Disputed Volume (₹) | CB-to-Txn Ratio (%) | Volume Dispute Ratio (%) |
+|:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| 1 | **Apparel** | 145 | ₹1,716,149.04 | 44 | ₹123,452.53 | **30.34%** | 7.19% |
+| 2 | **Miscellaneous Retail** | 1,632 | ₹21,146,382.55 | 308 | ₹815,458.89 | **18.87%** | 3.86% |
+| 3 | **Department Store** | 173 | ₹2,187,923.75 | 31 | ₹95,652.74 | **17.92%** | 4.37% |
+| 4 | **Transportation** | 2,975 | ₹37,033,388.46 | 443 | ₹1,380,455.84 | **14.89%** | 3.73% |
+| 5 | **Telecom** | 126 | ₹1,364,465.47 | 18 | ₹92,643.17 | **14.29%** | 6.79% |
+| 6 | **Restaurant** | 3,000 | ₹37,006,973.58 | 419 | ₹1,355,872.72 | **13.97%** | 3.66% |
+| 7 | **Grocery** | 5,840 | ₹73,646,226.49 | 767 | ₹2,655,892.84 | **13.13%** | 3.61% |
+| 8 | **Pharmacy** | 3,004 | ₹36,967,523.22 | 385 | ₹1,183,921.60 | **12.82%** | 3.20% |
+| 9 | **Hotel & Lodging** | 2,964 | ₹36,982,736.08 | 369 | ₹1,141,318.63 | **12.45%** | 3.09% |
+| 10 | **Books & Stationery** | 141 | ₹1,720,740.18 | 16 | ₹17,709.83 | **11.35%** | 1.03% |
+| **Total** | **Platform Wide** | **20,000** | **₹249,772,508.82** | **2,800** | **₹8,862,378.79** | **14.00%** | **3.55%** |
+
+* **Official Benchmark Finding:** **Apparel** ranks #1 with the highest chargeback-to-transaction ratio at **30.34%** (44 chargebacks / 145 transactions), confirming the benchmark finding directly from the reconciled trusted analytical layer.
+

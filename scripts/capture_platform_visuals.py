@@ -7,18 +7,27 @@ and captures high-resolution screenshots for documentation and competition submi
 import os
 import sys
 import time
-import subprocess
+import threading
+import uvicorn
 import httpx
 from playwright.sync_api import sync_playwright
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
+from backend.api.main import app
 SCREENSHOT_DIR = os.path.join(ROOT_DIR, "docs", "screenshots")
 os.makedirs(SCREENSHOT_DIR, exist_ok=True)
 
-PORT = 8008
+PORT = 8016
 BASE_URL = f"http://127.0.0.1:{PORT}"
 
-def wait_for_server(url: str, timeout: int = 30):
+class ThreadedServer(uvicorn.Server):
+    def install_signal_handlers(self):
+        pass
+
+def wait_for_server(url: str, timeout: int = 25):
     start = time.time()
     while time.time() - start < timeout:
         try:
@@ -27,7 +36,7 @@ def wait_for_server(url: str, timeout: int = 30):
                 print(" -> Backend server is ready and responding!")
                 return True
         except Exception:
-            time.sleep(0.5)
+            time.sleep(0.3)
     return False
 
 def main():
@@ -35,26 +44,20 @@ def main():
     print("STARTING PLAYWRIGHT AUTOMATED PLATFORM CAPTURE")
     print("=" * 60)
 
-    # 1. Start Server on PORT 8008
-    env = os.environ.copy()
-    env["PYTHONPATH"] = ROOT_DIR
-    cmd = [
-        sys.executable, "-m", "uvicorn", 
-        "backend.api.main:app", 
-        "--host", "127.0.0.1", 
-        "--port", str(PORT)
-    ]
-    print("Launching FastAPI on port " + str(PORT) + "...", flush=True)
-    proc = subprocess.Popen(
-        cmd, 
-        env=env, 
-        stdout=subprocess.DEVNULL, 
-        stderr=subprocess.DEVNULL
+    # 1. Start Server on PORT
+    config = uvicorn.Config(
+        app,
+        host="127.0.0.1",
+        port=PORT,
+        log_level="warning",
     )
+    server = ThreadedServer(config=config)
+    thread = threading.Thread(target=server.run, daemon=True)
+    thread.start()
 
     try:
         print("Waiting for server to become healthy...", flush=True)
-        if not wait_for_server(BASE_URL, timeout=45):
+        if not wait_for_server(BASE_URL, timeout=25):
             print("ERROR: Server failed to start in time.", flush=True)
             return
 
@@ -156,11 +159,7 @@ def main():
             print("=" * 60)
 
     finally:
-        proc.terminate()
-        try:
-            proc.wait(timeout=5)
-        except Exception:
-            proc.kill()
+        server.should_exit = True
 
 if __name__ == "__main__":
     main()

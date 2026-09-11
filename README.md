@@ -198,19 +198,23 @@ Every ring provides an explainable dossier with **Why Flagged** rationale, trans
 ### Official Datathon Benchmark Question:
 > *"Which merchant category has the highest chargeback-to-transaction ratio this quarter?"*
 
-**Answer computed from the trusted analytical layer (Q1 2026):**
-1. **Apparel**: **30.34%** (44 chargebacks on 145 transactions)
-2. **Miscellaneous Retail**: **18.87%** (308 chargebacks on 1,632 transactions)
-3. **Department Store**: **17.92%** (31 chargebacks on 173 transactions)
-4. **Transportation**: **13.59%** (403 chargebacks on 2,966 transactions)
-5. **Restaurant**: **13.31%** (398 chargebacks on 2,990 transactions)
-6. **Grocery**: **12.63%** (736 chargebacks on 5,826 transactions)
-7. **Pharmacy**: **11.92%** (357 chargebacks on 2,996 transactions)
-8. **Hotel & Lodging**: **11.38%** (336 chargebacks on 2,953 transactions)
-9. **Telecom**: **8.70%** (10 chargebacks on 115 transactions)
-10. **Books & Stationery**: **5.56%** (7 chargebacks on 126 transactions)
+**Authoritative Answer computed directly from the Trusted Analytical Layer (Q1 2026):**
 
-*Platform Average*: **14.00%** (2,800 chargebacks on 20,000 transactions).
+| Rank | Merchant Category | Transactions | Gross Volume (₹) | Chargebacks | Disputed Volume (₹) | CB-to-Txn Ratio (%) | Volume Dispute Ratio (%) |
+|:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| 1 | **Apparel** | 145 | ₹1,716,149.04 | 44 | ₹123,452.53 | **30.34%** | 7.19% |
+| 2 | **Miscellaneous Retail** | 1,632 | ₹21,146,382.55 | 308 | ₹815,458.89 | **18.87%** | 3.86% |
+| 3 | **Department Store** | 173 | ₹2,187,923.75 | 31 | ₹95,652.74 | **17.92%** | 4.37% |
+| 4 | **Transportation** | 2,975 | ₹37,033,388.46 | 443 | ₹1,380,455.84 | **14.89%** | 3.73% |
+| 5 | **Telecom** | 126 | ₹1,364,465.47 | 18 | ₹92,643.17 | **14.29%** | 6.79% |
+| 6 | **Restaurant** | 3,000 | ₹37,006,973.58 | 419 | ₹1,355,872.72 | **13.97%** | 3.66% |
+| 7 | **Grocery** | 5,840 | ₹73,646,226.49 | 767 | ₹2,655,892.84 | **13.13%** | 3.61% |
+| 8 | **Pharmacy** | 3,004 | ₹36,967,523.22 | 385 | ₹1,183,921.60 | **12.82%** | 3.20% |
+| 9 | **Hotel & Lodging** | 2,964 | ₹36,982,736.08 | 369 | ₹1,141,318.63 | **12.45%** | 3.09% |
+| 10 | **Books & Stationery** | 141 | ₹1,720,740.18 | 16 | ₹17,709.83 | **11.35%** | 1.03% |
+| **Total** | **Platform Wide** | **20,000** | **₹249,772,508.82** | **2,800** | **₹8,862,378.79** | **14.00%** | **3.55%** |
+
+* **Single Authoritative Finding:** **Apparel** records the highest dispute ratio at **30.34%** (44 chargebacks / 145 transactions), followed by **Miscellaneous Retail** at **18.87%** (308 chargebacks / 1,632 transactions) and **Department Store** at **17.92%** (31 chargebacks / 173 transactions).
 
 ---
 
@@ -218,7 +222,7 @@ Every ring provides an explainable dossier with **Why Flagged** rationale, trans
 
 The dashboard is built with React 19, TypeScript, Tailwind CSS, and Recharts:
 
-- **Executive Overview**: High-level KPIs (₹249.77M Gross Volume, 85.27% Success Rate, ₹7.52M Disputed Volume, 14.0% Dispute Ratio), daily volume trends, category risk benchmarks, and severity breakdowns.
+- **Executive Overview**: High-level KPIs (₹249.77M Gross Volume, 85.27% Success Rate, ₹8.86M Disputed Volume, 14.00% Dispute Ratio), daily volume trends, category risk benchmarks, and severity breakdowns.
 - **Fraud Ring Explorer**: Interactive Canvas-based Network Graph with physics layout, node dragging, click inspection, typology filters, and explainable dossiers.
 - **Merchant Risk Center**: Ranked table with multi-factor risk scores, declared vs actual ticket sizes, category filters, and full 360-degree merchant dossiers.
 - **Customer / Identity Risk Center**: Surveillance of conflicting KYC records, shared Aadhaar badges, repeat disputers, and customer dossiers.
