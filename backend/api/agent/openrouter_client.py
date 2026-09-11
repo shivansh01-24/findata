@@ -13,12 +13,13 @@ import httpx
 
 logger = logging.getLogger("openrouter_client")
 
-# Configurable list of Free OpenRouter models in prioritized fallback sequence
+# Configurable list of verified Free OpenRouter models in prioritized fallback sequence
 DEFAULT_FREE_MODELS = [
-    "meta-llama/llama-3.3-70b-instruct:free",
-    "google/gemini-2.0-flash-exp:free",
-    "qwen/qwen-2.5-72b-instruct:free",
-    "mistralai/mistral-small-24b-instruct-2501:free"
+    "inclusionai/ling-3.0-flash-fin:free",
+    "nvidia/nemotron-3.5-lightning:free",
+    "liquid/lfm-2.5-2.6b:free",
+    "nex-agi/nex-n2.5-mini:free",
+    "inclusionai/ling-3.0-flash-vl:free"
 ]
 
 
