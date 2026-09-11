@@ -160,6 +160,7 @@ export const AgentDrawer: React.FC<AgentDrawerProps> = ({
 
         <button
           onClick={onClose}
+          aria-label="Close AI drawer"
           className="rounded-lg p-2 text-slate-400 hover:bg-[#161f33] hover:text-white transition-colors"
         >
           <X className="h-5 w-5" />

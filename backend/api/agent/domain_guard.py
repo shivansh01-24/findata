@@ -17,7 +17,9 @@ ALLOWED_DOMAIN_KEYWORDS = [
     'quarter', 'trend', 'day', 'hour', 'severity', 'channel', 'resolution',
     'highest', 'top', 'lowest', 'rank', 'breakdown', 'distribution',
     'cluster', 'network', 'bipartite', 'graph', 'investigate', 'dossier',
-    'data rescue', 'duplicate', 'missing', 'profiling', 'audit', 'synthetic'
+    'data rescue', 'duplicate', 'missing', 'profiling', 'audit', 'synthetic',
+    'important', 'importance', 'impact', 'significance', 'meaning',
+    'explain', 'interpretation', 'business', 'consequence', 'why is it important'
 ]
 
 # Prompt-Injection & System Exfiltration Blacklist

@@ -15,6 +15,13 @@ An enterprise-grade UPI Fraud Intelligence, Merchant Risk Investigation, and Sta
 Messy Data  ──►  Data Rescue  ──►  Trusted Analytics  ──►  Fraud Intelligence  ──►  Executive Dashboard  ──►  Agentic Graph AI
 ```
 
+### 🏆 Datathon Submission Deliverables
+- 📹 **[Platform Video Walkthrough](docs/videos/findata_platform_demo.mp4)** (`1080p MP4`, Full Platform Walkthrough)
+- 📊 **[Judge Presentation Deck (PDF)](docs/presentation/FinData_Track1_Judge_Presentation.pdf)** (16:9 Landscape Pitch Deck)
+- 🖥️ **[Interactive Presentation Slides](docs/presentation/slides.html)** (Standalone Dark FinTech HTML5 Deck)
+- 📑 **[Data Quality & Reconciliation Report](DATA_QUALITY_REPORT.md)** (Forensic audit of 36.4K KYC, 6.2K merchants, 20.4K txns, 2.88K CBs)
+- 📖 **[Enterprise Data Dictionary](DATA_DICTIONARY.md)** (Schema definitions, entity mappings, and transformation rules)
+
 ---
 
 ## Visual Platform Walkthrough
@@ -328,19 +335,12 @@ Open your browser at: `http://localhost:5173`
 
 ## 17. Automated Test Suite & Playwright E2E
 
-### Full Test Suite (28/28 Tests Passing):
+### Full Test Suite (42/42 Tests Passing):
 ```bash
 pytest tests/ -v
 ```
 
 ```
-tests/test_agent.py::test_domain_guard_allowed PASSED                    [  3%]
-tests/test_agent.py::test_domain_guard_out_of_domain PASSED              [  7%]
-tests/test_agent.py::test_domain_guard_prompt_injection PASSED           [ 10%]
-tests/test_agent.py::test_deterministic_benchmark_query PASSED           [ 14%]
-tests/test_agent.py::test_openrouter_offline_fallback PASSED             [ 17%]
-tests/test_analytics.py::test_summary_kpis PASSED                        [ 21%]
-tests/test_analytics.py::test_category_chargeback_ratios PASSED          [ 25%]
 tests/test_agent.py::test_domain_guard_allowed PASSED                    [  2%]
 tests/test_agent.py::test_domain_guard_out_of_domain[Who won the 2022 World Cup?] PASSED [  4%]
 tests/test_agent.py::test_domain_guard_out_of_domain[Write a Python script to scrape a website] PASSED [  7%]
@@ -428,7 +428,9 @@ findata/
 │   ├── raw/                             # Pristine source data (preserved)
 │   └── processed/                       # Rescued trusted datasets & metadata
 ├── docs/
-│   └── screenshots/                     # 8 high-resolution platform visuals
+│   ├── presentation/                    # Pitch deck PDF, HTML5 slides, markdown
+│   ├── screenshots/                     # 8 high-resolution platform visuals
+│   └── videos/                          # Official 1080p demonstration videos
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
@@ -448,7 +450,9 @@ findata/
 │   ├── dist/                            # Production SPA bundle
 │   └── package.json
 ├── scripts/
-│   └── capture_platform_visuals.py      # Playwright automated screenshot script
+│   ├── capture_platform_visuals.py      # Playwright automated screenshot script
+│   ├── independent_data_audit.py        # Authoritative ground-truth data verifier
+│   └── verify_openrouter_live.py        # Multi-model OpenRouter test suite
 ├── tests/
 │   ├── test_agent.py                    # Domain, injection & fallback tests
 │   ├── test_analytics.py                # KPIs, ratios & rankings tests

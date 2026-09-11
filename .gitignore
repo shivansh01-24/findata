@@ -49,3 +49,9 @@ dist-ssr/
 # OS
 .DS_Store
 Thumbs.db
+
+# Media capture scratch
+docs/videos/raw_capture*
+docs/videos/page@*.webm
+docs/audio/
+
