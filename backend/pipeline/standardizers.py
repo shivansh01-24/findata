@@ -5,7 +5,7 @@ Preserves original values while providing trustworthy normalized data.
 """
 
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional, Tuple
 import pandas as pd
 import numpy as np
@@ -178,7 +178,7 @@ def parse_timestamp(val: Any) -> Tuple[Optional[str], str]:
     # Unix epoch seconds (e.g. 1770063471)
     if re.match(r'^\d{9,11}$', s):
         try:
-            dt = datetime.utcfromtimestamp(int(s))
+            dt = datetime.fromtimestamp(int(s), timezone.utc)
             return dt.strftime('%Y-%m-%d %H:%M:%S'), "UNIX_EPOCH_CONVERTED"
         except Exception:
             pass
