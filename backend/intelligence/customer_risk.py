@@ -138,17 +138,18 @@ class CustomerRiskEngine:
             df = df[df['kyc_status'].str.upper() == kyc_status.upper()]
         if risk_level and risk_level != 'ALL':
             df = df[df['risk_level'].str.upper() == risk_level.upper()]
+        df = df.replace({np.nan: None})
         return df.head(limit).to_dict(orient='records')
 
     def get_customer_dossier(self, user_id: str) -> Optional[Dict[str, Any]]:
         match = self.df_metrics[self.df_metrics['user_id'] == user_id]
         if len(match) == 0:
             return None
-        cust = match.iloc[0].to_dict()
+        cust = match.replace({np.nan: None}).iloc[0].to_dict()
 
         # Add recent transactions & chargebacks
-        recent_txns = self.df_txns[self.df_txns['user_id'] == user_id].head(20).to_dict(orient='records')
-        recent_cbs = self.df_cb[self.df_cb['user_id'] == user_id].head(20).to_dict(orient='records')
+        recent_txns = self.df_txns[self.df_txns['user_id'] == user_id].replace({np.nan: None}).head(20).to_dict(orient='records')
+        recent_cbs = self.df_cb[self.df_cb['user_id'] == user_id].replace({np.nan: None}).head(20).to_dict(orient='records')
 
         cust['recent_transactions'] = recent_txns
         cust['recent_chargebacks'] = recent_cbs

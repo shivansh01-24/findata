@@ -164,18 +164,19 @@ class MerchantRiskEngine:
         if status and status != 'ALL':
             df = df[df['merchant_status'].str.upper() == status.upper()]
             
+        df = df.replace({np.nan: None})
         return df.head(limit).to_dict(orient='records')
 
     def get_merchant_dossier(self, merchant_id: str) -> Optional[Dict[str, Any]]:
         match = self.df_metrics[self.df_metrics['merchant_id'] == merchant_id]
         if len(match) == 0:
             return None
-        mch = match.iloc[0].to_dict()
+        mch = match.replace({np.nan: None}).iloc[0].to_dict()
 
         # Add recent transactions
-        recent_txns = self.df_txns[self.df_txns['merchant_id'] == merchant_id].head(20).to_dict(orient='records')
+        recent_txns = self.df_txns[self.df_txns['merchant_id'] == merchant_id].replace({np.nan: None}).head(20).to_dict(orient='records')
         # Add recent chargebacks
-        recent_cbs = self.df_cb[self.df_cb['merchant_id'] == merchant_id].head(20).to_dict(orient='records')
+        recent_cbs = self.df_cb[self.df_cb['merchant_id'] == merchant_id].replace({np.nan: None}).head(20).to_dict(orient='records')
 
         mch['recent_transactions'] = recent_txns
         mch['recent_chargebacks'] = recent_cbs
