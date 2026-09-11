@@ -1,18 +1,57 @@
 # FinData: UPI Fraud Intelligence Platform
 ### TransOrg AgentIQ Datathon — Track 1: FinTech & BFSI
 
-[![Tests](https://img.shields.io/badge/tests-17%2F17%20passed-success)](https://github.com/shivansh01-24/findata)
+[![Tests](https://img.shields.io/badge/tests-28%2F28%20passed-success)](https://github.com/shivansh01-24/findata)
+[![Playwright](https://img.shields.io/badge/playwright-E2E%20verified-green)](https://playwright.dev)
 [![Python](https://img.shields.io/badge/python-3.12-blue)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-1.0.0-teal)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-19-blue)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-6.2-purple)](https://vitejs.dev)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-An enterprise-grade UPI Fraud Intelligence & Merchant Risk Investigation Platform built for the **TransOrg AgentIQ Datathon**. It demonstrates the complete analytical progression:
+An enterprise-grade UPI Fraud Intelligence, Merchant Risk Investigation, and Statutory Compliance Platform built for the **TransOrg AgentIQ Datathon**. It demonstrates the complete analytical progression:
 
 ```
 Messy Data  ──►  Data Rescue  ──►  Trusted Analytics  ──►  Fraud Intelligence  ──►  Executive Dashboard  ──►  Agentic Graph AI
 ```
+
+---
+
+## Visual Platform Walkthrough
+
+The platform includes 6 production-grade modules and an autonomous AI agent, verified via Playwright headless Chromium testing and automated visual capture.
+
+### 1. Executive Overview & Benchmark Spotlight
+*Grounded KPI telemetry, real-time volume trends, and definitive answer to the datathon benchmark question.*
+![Executive Overview](docs/screenshots/01_executive_overview.png)
+
+### 2. Fraud Ring Explorer & Network Intelligence
+*Interactive Canvas-based Network Graph with physics simulation, node clustering, and 295 detected fraud syndicates across shared settlement accounts, synthetic identities, and bust-out rings.*
+![Fraud Ring Explorer](docs/screenshots/02_fraud_ring_explorer.png)
+
+### 3. Merchant Risk Intelligence Center
+*Multivariate risk scoring (0-100), ticket size anomaly detection (>2.5x standard deviations), dispute concentration, and full 360-degree merchant risk profiles.*
+![Merchant Risk Center](docs/screenshots/03_merchant_risk_center.png)
+
+### 4. Customer & Synthetic Identity Risk Center
+*Surveillance of conflicting KYC records, shared Aadhaar credentials across divergent names, and repeat dispute abusers across 28,920 golden customer profiles.*
+![Customer Risk Center](docs/screenshots/04_customer_risk_center.png)
+
+### 5. Risk Policy & Dynamic Threshold Simulator
+*Conduct live "what-if" risk simulations. Interactively tune chargeback caps (5%-50%), ticket multipliers (1.0x-4.0x), and mule sharing thresholds to observe immediate GMV impact and dispute containment.*
+![Risk Policy Simulator](docs/screenshots/05_risk_policy_simulator.png)
+
+### 6. Forensic Data Rescue & Entity Reconciliation Audit
+*Side-by-side raw versus golden entity diff matrix showing exact attribute canonicalization, conflict confidence scoring, and audit traces for curated benchmark cases (e.g. MCH7912 6-row conflict).*
+![Data Rescue Audit Diff](docs/screenshots/06_data_rescue_audit_diff.png)
+
+### 7. FIU-IND Suspicious Transaction Report (STR) Dossier
+*Automated regulatory reporting complying with PMLA 2002 Section 12 and RBI Master Directions. Produces court-admissible Markdown briefs and FINnet 2.0-compliant machine JSON with 1-click download.*
+![FIU-IND STR Dossier](docs/screenshots/07_fiu_ind_str_dossier.png)
+
+### 8. Domain-Constrained Agentic Graph AI
+*Autonomous conversational AI assistant with hard application-level domain guards, strict prompt injection defense, deterministic calculation grounding, and dynamic chart rendering.*
+![Agentic Graph AI](docs/screenshots/08_agentic_ai_chat.png)
 
 ---
 
@@ -27,13 +66,15 @@ Messy Data  ──►  Data Rescue  ──►  Trusted Analytics  ──►  Fra
 8. [Merchant & Customer Risk Models](#merchant--customer-risk-models)
 9. [Chargeback Intelligence & Benchmark Answers](#chargeback-intelligence--benchmark-answers)
 10. [Executive Dashboard Architecture](#executive-dashboard-architecture)
-11. [Agentic Graph AI Engine](#agentic-graph-ai-engine)
-12. [OpenRouter Free-Model Fallback Architecture](#openrouter-free-model-fallback-architecture)
-13. [Installation & Setup](#installation--setup)
-14. [Running the Platform](#running-the-platform)
-15. [Automated Test Suite](#automated-test-suite)
-16. [Repository Structure](#repository-structure)
-17. [Judging Rubric Compliance](#judging-rubric-compliance)
+11. [Risk Policy Simulation Engine](#risk-policy-simulation-engine)
+12. [FIU-IND STR Regulatory Dossier Generator](#fiu-ind-str-regulatory-dossier-generator)
+13. [Agentic Graph AI Engine](#agentic-graph-ai-engine)
+14. [OpenRouter Free-Model Fallback Architecture](#openrouter-free-model-fallback-architecture)
+15. [Installation & Setup](#installation--setup)
+16. [Running the Platform](#running-the-platform)
+17. [Automated Test Suite & Playwright E2E](#automated-test-suite--playwright-e2e)
+18. [Repository Structure](#repository-structure)
+19. [Judging Rubric Compliance](#judging-rubric-compliance)
 
 ---
 
@@ -52,7 +93,7 @@ Financial institutions face three critical challenges:
 2. **Synthetic Identity Farming**: Disparate customer profiles registered with identical recycled Aadhaar numbers.
 3. **High-Dispute Bust-Outs**: Storefronts experiencing explosive transaction volumes followed by extreme dispute and chargeback rates.
 
-This platform bridges the gap between raw data engineering and executive decision-making.
+This platform bridges the gap between raw data engineering, quantitative risk management, and regulatory compliance.
 
 ---
 
@@ -122,7 +163,7 @@ Entity resolution on Customer KYC and Merchant Master separates duplicates into 
 
 ## 7. Fraud Ring & Graph Intelligence
 
-Using **NetworkX**, the intelligence engine maps the bipartite and projected graphs between Customers, Merchants, and Settlement Accounts, identifying **295 suspicious networks**:
+Using **NetworkX**, the intelligence engine maps bipartite and projected graphs between Customers, Merchants, and Settlement Accounts, identifying **295 suspicious networks**:
 
 1. **Shared Settlement Mule Syndicates (71 Networks)**:
    - Multiple commercial merchants funnel funds into identical bank settlement accounts (e.g. account `XXXX0207` shared by multiple merchants).
@@ -169,21 +210,44 @@ Every ring provides an explainable dossier with **Why Flagged** rationale, trans
 9. **Telecom**: **8.70%** (10 chargebacks on 115 transactions)
 10. **Books & Stationery**: **5.56%** (7 chargebacks on 126 transactions)
 
+*Platform Average*: **14.00%** (2,800 chargebacks on 20,000 transactions).
+
 ---
 
 ## 10. Executive Dashboard Architecture
 
 The dashboard is built with React 19, TypeScript, Tailwind CSS, and Recharts:
 
-- **View 1: Executive Overview**: High-level KPIs (₹224.95M Gross Volume, 85.27% Success Rate, ₹7.52M Disputed Volume, 14.0% Dispute Ratio), daily volume trends, category risk benchmarks, and severity breakdowns.
-- **View 2: Fraud Ring Explorer**: Interactive Canvas-based Network Graph with physics layout, node dragging, click inspection, typology filters, and explainable dossiers.
-- **View 3: Merchant Risk Center**: Ranked table with multi-factor risk scores, declared vs actual ticket sizes, category filters, and full 360-degree merchant dossiers.
-- **View 4: Customer / Identity Risk Center**: Surveillance of conflicting KYC records, shared Aadhaar badges, repeat disputers, and customer dossiers.
-- **View 5: Data Rescue & Audit Trail**: Transparent before/after metrics, duplicate resolution breakdown, and foreign key integrity.
+- **Executive Overview**: High-level KPIs (₹249.77M Gross Volume, 85.27% Success Rate, ₹7.52M Disputed Volume, 14.0% Dispute Ratio), daily volume trends, category risk benchmarks, and severity breakdowns.
+- **Fraud Ring Explorer**: Interactive Canvas-based Network Graph with physics layout, node dragging, click inspection, typology filters, and explainable dossiers.
+- **Merchant Risk Center**: Ranked table with multi-factor risk scores, declared vs actual ticket sizes, category filters, and full 360-degree merchant dossiers.
+- **Customer / Identity Risk Center**: Surveillance of conflicting KYC records, shared Aadhaar badges, repeat disputers, and customer dossiers.
+- **Risk Simulator**: Interactive policy modeling allowing risk officers to adjust dispute caps, ticket size multipliers, and mule thresholds with real-time portfolio recalculation.
+- **Data Rescue & Audit Trail**: Transparent before/after metrics, duplicate resolution breakdown, foreign key integrity, and side-by-side raw vs golden reconciliation diffs.
 
 ---
 
-## 11. Agentic Graph AI Engine
+## 11. Risk Policy Simulation Engine
+
+The interactive simulation engine (`backend/intelligence/policy_simulator.py`) enables risk officers to conduct "what-if" policy testing:
+- **Dispute Rate Threshold**: Modulate strictness from 5% to 50% (default: 20%).
+- **Ticket Size Multiplier**: Flag merchants exceeding declared ticket sizes by 1.0x to 4.0x (default: 2.0x).
+- **Mule Sharing Threshold**: Flag bank accounts shared across 1 to 5+ entities (default: 2).
+- **Real-Time Calculation**: Displays simulated flagged merchants, contained dispute volume, and GMV preserved, with 1-click FIU-IND STR generation for newly flagged merchants.
+
+---
+
+## 12. FIU-IND STR Regulatory Dossier Generator
+
+The statutory reporting engine (`backend/intelligence/fiu_str_generator.py`) complies with **PMLA 2002 Section 12** and **RBI Master Directions on Fraud Reporting**:
+- **Dual Output Modes**:
+  1. **Court-Admissible Legal Markdown Brief**: Complete with reporting entity credentials, suspect entity tables, grounding transaction evidence, typology classification, and investigator sign-off.
+  2. **FINnet 2.0 Machine JSON**: Structured telemetry schema ready for automated regulatory batch submission.
+- Available for all 295 detected fraud rings and any individual high-risk merchant with 1-click modal viewing and download.
+
+---
+
+## 13. Agentic Graph AI Engine
 
 The Agent is a specialized **UPI Fraud Intelligence Assistant**:
 1. **Hard Application-Level Domain Guard**: Strictly allows payment, fraud, KYC, and chargeback queries. Refuses off-topic questions (e.g., general knowledge, coding) with:
@@ -194,7 +258,7 @@ The Agent is a specialized **UPI Fraud Intelligence Assistant**:
 
 ---
 
-## 12. OpenRouter Free-Model Fallback Architecture
+## 14. OpenRouter Free-Model Fallback Architecture
 
 Per competition rules, OpenRouter is the only LLM provider used:
 - Default sequence of free models:
@@ -211,11 +275,12 @@ If OpenRouter is unavailable or rate-limited:
 
 ---
 
-## 13. Installation & Setup
+## 15. Installation & Setup
 
 ### Prerequisites:
 - Python 3.10+
 - Node.js 18+ and npm
+- Playwright browsers (installed via `playwright install chromium`)
 
 ### 1. Clone the repository:
 ```bash
@@ -226,7 +291,9 @@ cd findata
 ### 2. Backend Setup:
 ```bash
 python -m pip install -r requirements.txt
-# Run the data rescue pipeline to build the trusted layer
+python -m playwright install chromium
+
+# Run data rescue pipeline to build the trusted layer
 python backend/pipeline/build_trusted_layer.py
 ```
 
@@ -234,95 +301,150 @@ python backend/pipeline/build_trusted_layer.py
 ```bash
 cd frontend
 npm install
+npm run build
 cd ..
 ```
 
 ---
 
-## 14. Running the Platform
+## 16. Running the Platform
 
-### Start Backend API Server:
+### Option A: Unified Production Mode (FastAPI serves compiled SPA)
 ```bash
-uvicorn backend.api.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn backend.api.main:app --host 127.0.0.1 --port 8000
 ```
+Open your browser at: `http://127.0.0.1:8000`
 
-### Start Frontend Dashboard:
-```bash
-cd frontend
-npm run dev
-```
-
-Open your browser at `http://localhost:5173`.
+### Option B: Development Mode (Vite HMR + FastAPI API)
+- Terminal 1: `uvicorn backend.api.main:app --host 127.0.0.1 --port 8000 --reload`
+- Terminal 2: `cd frontend && npm run dev`
+Open your browser at: `http://localhost:5173`
 
 ---
 
-## 15. Automated Test Suite
+## 17. Automated Test Suite & Playwright E2E
 
-Run the test suite covering data standardizers, entity resolution, risk analytics, and agent guardrails:
-
+### Full Test Suite (28/28 Tests Passing):
 ```bash
-python -m pytest tests/ -v
+pytest tests/ -v
 ```
 
-**Results: 17 passed in 6.56s (100% passing)**
+```
+tests/test_agent.py::test_domain_guard_allowed PASSED                    [  3%]
+tests/test_agent.py::test_domain_guard_out_of_domain PASSED              [  7%]
+tests/test_agent.py::test_domain_guard_prompt_injection PASSED           [ 10%]
+tests/test_agent.py::test_deterministic_benchmark_query PASSED           [ 14%]
+tests/test_agent.py::test_openrouter_offline_fallback PASSED             [ 17%]
+tests/test_analytics.py::test_summary_kpis PASSED                        [ 21%]
+tests/test_analytics.py::test_category_chargeback_ratios PASSED          [ 25%]
+tests/test_analytics.py::test_merchant_risk_rankings PASSED              [ 28%]
+tests/test_analytics.py::test_customer_risk_rankings PASSED              [ 32%]
+tests/test_audit_service.py::test_curated_cases PASSED                   [ 35%]
+tests/test_audit_service.py::test_entity_search PASSED                   [ 39%]
+tests/test_audit_service.py::test_merchant_audit_diff PASSED             [ 42%]
+tests/test_audit_service.py::test_customer_audit_diff PASSED             [ 46%]
+tests/test_e2e_playwright.py::test_e2e_overview_and_navigation PASSED    [ 50%]
+tests/test_e2e_playwright.py::test_e2e_fiu_str_modal PASSED              [ 53%]
+tests/test_e2e_playwright.py::test_e2e_agent_drawer_and_query PASSED     [ 57%]
+tests/test_policy_simulator.py::test_policy_simulation_defaults PASSED   [ 60%]
+tests/test_policy_simulator.py::test_policy_simulation_sensitivity PASSED [ 64%]
+tests/test_standardizers.py::test_user_id_normalization PASSED           [ 67%]
+tests/test_standardizers.py::test_merchant_id_normalization PASSED       [ 71%]
+tests/test_standardizers.py::test_amount_parsing PASSED                  [ 75%]
+tests/test_standardizers.py::test_timestamp_parsing PASSED               [ 78%]
+tests/test_standardizers.py::test_txn_status_normalization PASSED        [ 82%]
+tests/test_standardizers.py::test_utr_normalization PASSED               [ 85%]
+tests/test_standardizers.py::test_pan_and_aadhaar PASSED                 [ 89%]
+tests/test_standardizers.py::test_category_normalization PASSED          [ 92%]
+tests/test_str_generator.py::test_ring_str_generation PASSED             [ 96%]
+tests/test_str_generator.py::test_merchant_str_generation PASSED         [100%]
+
+======================= 28 passed in 48.59s =======================
+```
+
+### Automated Visual Capture:
+To regenerate all 8 platform screenshots automatically:
+```bash
+python scripts/capture_platform_visuals.py
+```
+
+### Automated End-to-End Smoke Test:
+```bash
+python smoke_test.py
+```
 
 ---
 
-## 16. Repository Structure
+## 18. Repository Structure
 
 ```
 findata/
 ├── backend/
 │   ├── api/
 │   │   ├── agent/
-│   │   │   ├── domain_guard.py          # Domain & injection defense
-│   │   │   ├── deterministic_engine.py  # Grounded mathematical queries
-│   │   │   └── openrouter_client.py     # Multi-model free fallback
-│   │   └── main.py                      # FastAPI REST application
+│   │   │   ├── domain_guard.py          # Domain & prompt injection defense
+│   │   │   ├── deterministic_engine.py  # Grounded mathematical query engine
+│   │   │   └── openrouter_client.py     # Multi-model free fallback client
+│   │   └── main.py                      # FastAPI REST application & SPA server
 │   ├── intelligence/
-│   │   ├── chargeback_analytics.py      # Category ratios & KPIs
-│   │   ├── customer_risk.py             # Synthetic ID & KYC scoring
-│   │   ├── fraud_rings.py               # NetworkX graph ring detection
-│   │   └── merchant_risk.py             # Multivariate merchant risk
+│   │   ├── chargeback_analytics.py      # Category ratios & volume KPIs
+│   │   ├── customer_risk.py             # Synthetic ID & KYC risk scoring
+│   │   ├── fiu_str_generator.py         # Statutory FIU-IND STR dossier engine
+│   │   ├── fraud_rings.py               # NetworkX graph syndicate detection
+│   │   ├── merchant_risk.py             # Multivariate merchant risk ranking
+│   │   └── policy_simulator.py          # Interactive policy simulation engine
 │   └── pipeline/
+│       ├── audit_service.py             # In-memory entity reconciliation diffs
 │       ├── build_trusted_layer.py       # Orchestration pipeline
 │       ├── data_profiler.py             # Forensic profiler
-│       ├── entity_resolution.py         # Golden record consolidation
-│       └── standardizers.py             # Cleaning & rescue rules
+│       ├── entity_resolution.py         # Golden record consolidation engine
+│       └── standardizers.py             # Canonicalization & rescue rules
 ├── data/
 │   ├── raw/                             # Pristine source data (preserved)
-│   └── processed/                       # Rescued trusted datasets
+│   └── processed/                       # Rescued trusted datasets & metadata
+├── docs/
+│   └── screenshots/                     # 8 high-resolution platform visuals
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── AgentDrawer.tsx          # Natural language AI drawer
-│   │   │   ├── CustomerRiskCenter.tsx   # View 4
-│   │   │   ├── DataRescueAudit.tsx      # View 5
-│   │   │   ├── ExecutiveOverview.tsx    # View 1
-│   │   │   ├── FraudRingExplorer.tsx    # View 2
-│   │   │   ├── KeyModal.tsx             # OpenRouter key settings
-│   │   │   ├── MerchantRiskCenter.tsx   # View 3
-│   │   │   ├── Navbar.tsx               # Navigation & status bar
-│   │   │   └── NetworkGraph.tsx         # Interactive canvas graph
+│   │   │   ├── CustomerRiskCenter.tsx   # Customer & synthetic ID surveillance
+│   │   │   ├── DataRescueAudit.tsx      # Forensic raw vs golden diff matrix
+│   │   │   ├── ExecutiveOverview.tsx    # Executive KPIs & benchmark finding
+│   │   │   ├── FraudRingExplorer.tsx    # Interactive Canvas network graph
+│   │   │   ├── KeyModal.tsx             # OpenRouter API key modal
+│   │   │   ├── MerchantRiskCenter.tsx   # Merchant risk rankings & 360 dossiers
+│   │   │   ├── Navbar.tsx               # Header navigation & status bar
+│   │   │   ├── NetworkGraph.tsx         # Canvas physics-based graph renderer
+│   │   │   ├── RiskSimulator.tsx        # Interactive policy simulation tab
+│   │   │   └── STRReportModal.tsx       # Statutory FIU-IND STR dossier viewer
 │   │   ├── App.tsx
 │   │   └── main.tsx
+│   ├── dist/                            # Production SPA bundle
 │   └── package.json
+├── scripts/
+│   └── capture_platform_visuals.py      # Playwright automated screenshot script
 ├── tests/
-│   ├── test_agent.py                    # Domain, injection & fallback
-│   ├── test_analytics.py                # KPIs, ratios & rankings
-│   └── test_standardizers.py            # Normalization & parsing
+│   ├── test_agent.py                    # Domain, injection & fallback tests
+│   ├── test_analytics.py                # KPIs, ratios & rankings tests
+│   ├── test_audit_service.py            # Reconciliation diff & search tests
+│   ├── test_e2e_playwright.py           # Headless Chromium E2E browser tests
+│   ├── test_policy_simulator.py         # Risk policy simulation tests
+│   ├── test_standardizers.py            # Normalization & parsing tests
+│   └── test_str_generator.py            # FIU-IND STR generation tests
+├── smoke_test.py                        # 13-stage automated platform verification
 ├── DATA_DICTIONARY.md                   # Enterprise data dictionary
 ├── DATA_QUALITY_REPORT.md               # Forensic profiling report
-└── README.md                            # Complete documentation
+└── README.md                            # Complete documentation & visuals
 ```
 
 ---
 
-## 17. Judging Rubric Compliance
+## 19. Judging Rubric Compliance
 
 | Rubric Gate | Requirement | Implementation Status |
 |---|---|---|
-| **Gate 1** | Sanity & Raw Data Preservation | Source files preserved in `data/raw/` untouched; no synthetic replacements. |
-| **Gate 2** | Data Engineering & Entity Resolution | Standardizers, 4-tier duplicate resolution, FK audit trail, before/after metrics. |
-| **Gate 3** | Executive Dashboard & Business Value | 5 interactive views, interactive Canvas graph, category benchmark answers. |
-| **Gate 4** | Engineering & Agentic Graph AI | Strict domain guard, injection defense, OpenRouter free fallback, deterministic grounding. |
+| **Gate 1: Sanity & Preservation** | Raw Data Preservation & Audit Trails | Source files in `data/raw/` untouched; 100% preservation with audit flags; zero synthetic replacements. |
+| **Gate 2: Data Engineering** | Entity Resolution & Standardizers | 4-tier duplicate resolution; 28,920 golden customers; 4,343 golden merchants; FK link validation. |
+| **Gate 3: Dashboard & Value** | Visual Insights & Business Usability | 6 interactive tabs; Recharts; Canvas network graph; interactive risk policy simulator; 1-click FIU-IND STRs. |
+| **Gate 4: Agentic AI & Quality** | Grounded AI & Robust Engineering | Strict domain guard; prompt injection defense; OpenRouter free fallback; 28/28 passing pytest suite; Playwright E2E. |

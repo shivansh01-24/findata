@@ -119,6 +119,8 @@ export const STRReportModal: React.FC<STRReportModalProps> = ({
 
             <button
               onClick={onClose}
+              aria-label="Close modal"
+              title="Close"
               className="rounded-lg p-1.5 text-slate-400 hover:bg-[#1f2a44] hover:text-white transition-colors"
             >
               <X className="h-5 w-5" />
