@@ -47,48 +47,50 @@ class DeterministicQueryEngine:
             if cat_name in q and any(w in q for w in ['why', 'performance', 'about', 'risk', 'detail', 'stat', 'how many']):
                 return self._query_specific_category(cat_name)
 
-        # 1. Chargeback-to-Transaction Ratio by Category (Benchmark Question)
-        if any(w in q for w in ['ratio', 'rate', 'highest chargeback', 'dispute rate']) and any(w in q for w in ['category', 'quarter', 'merchant category', 'highest']):
+        # 1. Chargeback-to-Transaction Ratio by Category (Benchmark Question & Synonyms)
+        is_category_query = any(w in q for w in ['category', 'categories', 'merchant category', 'sector', 'industry'])
+        has_ratio_signal = any(w in q for w in ['ratio', 'rate', 'highest chargeback', 'worst', 'problematic', 'riskiest', 'most dispute', 'most chargeback', 'highest dispute', 'chargeback-to-transaction', 'dispute rate', 'percentage'])
+        if is_category_query and (has_ratio_signal or 'chargeback' in q or 'dispute' in q):
             return self._query_category_cb_ratio()
 
         # 2. Daily Volume / Value Trend
-        if any(w in q for w in ['trend', 'daily', 'volume over time', 'by day', 'timeline']) and any(w in q for w in ['transaction', 'volume', 'amount', 'value']):
+        if any(w in q for w in ['trend', 'daily', 'volume over time', 'by day', 'timeline', 'over time', 'time series', 'progression']) and any(w in q for w in ['transaction', 'volume', 'amount', 'value', 'txn']):
             return self._query_daily_trend()
 
         # 3. Successful vs Failed Transactions
-        if any(w in q for w in ['success', 'fail', 'status']) and any(w in q for w in ['compare', 'ratio', 'breakdown', 'vs']):
+        if any(w in q for w in ['success', 'fail', 'failed', 'failure', 'status', 'declined', 'rejection', 'completion rate']) and any(w in q for w in ['compare', 'ratio', 'breakdown', 'vs', 'rate', 'count', 'show', 'distribution']):
             return self._query_status_breakdown()
 
         # 4. Top Merchants by Chargebacks / Disputed Amount
-        if any(w in q for w in ['merchant', 'merchants']) and any(w in q for w in ['highest chargeback', 'top', 'chargeback count', 'most disputes', 'disputed amount', 'highest']):
+        if any(w in q for w in ['merchant', 'merchants', 'store', 'seller', 'vendor']) and any(w in q for w in ['highest chargeback', 'top', 'chargeback count', 'most disputes', 'disputed amount', 'highest', 'riskiest', 'worst', 'most chargebacks', 'fraudulent']):
             return self._query_top_merchants_disputes(by_amount=('amount' in q or 'volume' in q))
 
         # 5. Chargeback Reasons & Root Causes
-        if any(w in q for w in ['reason', 'why', 'causes', 'complaint']) and any(w in q for w in ['chargeback', 'dispute', 'distribution']):
+        if any(w in q for w in ['reason', 'reasons', 'why', 'causes', 'complaint', 'root cause']) and any(w in q for w in ['chargeback', 'dispute', 'distribution', 'breakdown']):
             return self._query_chargeback_reasons()
 
         # 6. Severity Distribution
-        if any(w in q for w in ['severity', 'critical', 'priority']) and any(w in q for w in ['chargeback', 'dispute', 'compare', 'distribution']):
+        if any(w in q for w in ['severity', 'critical', 'priority', 'high priority']) and any(w in q for w in ['chargeback', 'dispute', 'compare', 'distribution', 'breakdown']):
             return self._query_severity_distribution()
 
         # 7. Top Disputing Customers / Users
-        if any(w in q for w in ['user', 'customer', 'users', 'customers']) and any(w in q for w in ['top', 'highest', 'disputed amount', 'repeat', 'chargeback']):
+        if any(w in q for w in ['user', 'customer', 'users', 'customers', 'payer', 'payers']) and any(w in q for w in ['top', 'highest', 'disputed amount', 'repeat', 'chargeback', 'dispute', 'abuser', 'abusers', 'serial']):
             return self._query_top_users_disputes()
 
         # 8. KYC Status vs Transactions / Risk
-        if any(w in q for w in ['kyc', 'kyc status', 'verified', 'rejected']) and any(w in q for w in ['amount', 'transaction', 'highest', 'volume']):
+        if any(w in q for w in ['kyc', 'kyc status', 'verified', 'rejected', 'pending kyc', 'identity status']) and any(w in q for w in ['amount', 'transaction', 'highest', 'volume', 'performance', 'risk']):
             return self._query_kyc_performance()
 
         # 9. Fraud Rings / Syndicates
-        if any(w in q for w in ['ring', 'syndicate', 'mule', 'network', 'settlement account', 'circular']):
+        if any(w in q for w in ['ring', 'rings', 'syndicate', 'syndicates', 'mule', 'mules', 'network', 'networks', 'settlement account', 'circular', 'bust-out', 'synthetic']):
             return self._query_fraud_rings_summary()
 
         # 10. Missing or Invalid UTRs
-        if any(w in q for w in ['utr', 'missing utr', 'invalid utr']):
+        if any(w in q for w in ['utr', 'missing utr', 'invalid utr', 'reference number', 'utr anomalies']):
             return self._query_utr_anomalies()
 
         # 11. Disputes Reported after Long Delays
-        if any(w in q for w in ['delay', 'reporting delay', 'days', 'late', 'long delay']):
+        if any(w in q for w in ['delay', 'delays', 'reporting delay', 'days', 'late', 'long delay', 'lag', 'latency']):
             return self._query_dispute_delays()
 
         # Default: Comprehensive Executive Overview
