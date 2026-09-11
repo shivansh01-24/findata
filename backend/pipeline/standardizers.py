@@ -114,10 +114,18 @@ def parse_amount(val: Any) -> Tuple[Optional[float], str]:
     # Check negative
     is_neg = '-' in s
     
-    # Remove currency symbols and formatting
+    # Remove known currency words/symbols first so abbreviation dots (like in 'Rs.') don't collide with decimal dot
+    s = re.sub(r'(?i)(rs\.?|inr|₹)', '', s)
+    
+    # Remove other non-digit non-dot characters
     cleaned = re.sub(r'[^\d.]', '', s)
     if not cleaned:
         return None, "MALFORMED_AMOUNT"
+    
+    # If multiple dots remain, keep only the last one as decimal point
+    if cleaned.count('.') > 1:
+        parts = cleaned.split('.')
+        cleaned = ''.join(parts[:-1]) + '.' + parts[-1]
     
     try:
         amt = float(cleaned) * multiplier
