@@ -1,0 +1,169 @@
+WEBVTT
+
+1
+00:00:01.000 --> 00:00:07.500
+Welcome to the FinData UPI Fraud Intelligence Platform demo for the TransOrg AgentIQ Datathon Track 1.
+
+2
+00:00:08.000 --> 00:00:18.500
+In this challenge, we were given messy UPI, KYC, merchant, and chargeback datasets containing inconsistent identifiers, formats, duplicates, and broken relationships.
+
+3
+00:00:19.000 --> 00:00:27.500
+Instead of discarding records or running black-box models on dirty data, we engineered an end-to-end forensic pipeline.
+
+4
+00:00:28.000 --> 00:00:36.500
+It rescues data, surfaces fraud syndicates, and powers conversational graph intelligence.
+
+5
+00:00:38.500 --> 00:00:45.500
+In the Data Rescue and Forensic Audit Center, you can see our entity resolution engine in action.
+
+6
+00:00:46.000 --> 00:00:53.500
+We ingested 36,400 raw KYC records and unified them into 28,920 golden customer profiles.
+
+7
+00:00:54.000 --> 00:01:01.500
+We reconciled 6,210 raw merchant records down to 4,343 authoritative golden merchants.
+
+8
+00:01:02.000 --> 00:01:10.000
+20,400 raw logs were cleaned into 20,000 trusted transactions, and 2,884 raw chargebacks yielded 2,800 trusted chargebacks.
+
+9
+00:01:10.500 --> 00:01:18.500
+Crucially, we preserved every single raw record with forensic audit tags rather than blindly deleting them.
+
+10
+00:01:19.000 --> 00:01:28.500
+Here is merchant MCH7912, where 6 conflicting raw rows were resolved with a complete before-and-after audit trail.
+
+11
+00:01:30.500 --> 00:01:34.500
+Next, we move to the Executive Dashboard.
+
+12
+00:01:35.000 --> 00:01:45.500
+Across Q1 2026, the platform processed INR 249.77M across 20,000 transactions, with 2,800 chargebacks representing a 14% dispute rate.
+
+13
+00:01:46.000 --> 00:01:52.500
+Our category risk matrix immediately spotlights risk concentrations across the payment ecosystem.
+
+14
+00:01:53.000 --> 00:02:02.500
+Apparel leads the platform with a 30.34% chargeback-to-transaction ratio, followed by Miscellaneous Retail at 18.87%.
+
+15
+00:02:03.000 --> 00:02:10.500
+Real-time telemetry tracks hourly fraud velocity, settlement latency spikes, and payment mode volume distributions.
+
+16
+00:02:12.500 --> 00:02:19.500
+In the Merchant Risk Intelligence Center, risk analysts can filter and prioritize high-risk merchants across categories.
+
+17
+00:02:20.000 --> 00:02:27.500
+Let us inspect Date Plc, merchant MCH4790, which carries a critical risk score of 95 out of 100.
+
+18
+00:02:28.000 --> 00:02:36.500
+The platform connects transactions to customer chargebacks, exposing a 90% dispute concentration and abnormal velocity.
+
+19
+00:02:37.000 --> 00:02:43.500
+Automated investigation priority scoring allows risk teams to take proactive mitigation action.
+
+20
+00:02:45.500 --> 00:02:51.500
+Now, we explore the Fraud Ring Intelligence Center.
+
+21
+00:02:52.000 --> 00:02:58.500
+Traditional rule engines evaluate transactions in isolation, missing coordinated collusive rings.
+
+22
+00:02:59.000 --> 00:03:06.500
+Our platform constructs multi-hop graph topologies linking customers, transactions, merchants, and chargebacks.
+
+23
+00:03:07.000 --> 00:03:13.500
+Look at Ring Settle 001, a shared settlement syndicate with a maximum risk score of 100.
+
+24
+00:03:14.000 --> 00:03:21.500
+By inspecting the graph, we uncover multiple unrelated merchant storefronts funneling illicit proceeds into a single shared bank account.
+
+25
+00:03:22.000 --> 00:03:26.000
+The system flags this multi-merchant laundering syndicate and maps every connected entity.
+
+26
+00:03:27.500 --> 00:03:33.500
+Moving to the Customer and Identity Risk Center, we identify synthetic identity clusters.
+
+27
+00:03:34.000 --> 00:03:39.500
+Customer USR62254, Oni Subramanian, carries a 90 risk score.
+
+28
+00:03:40.000 --> 00:03:48.000
+The engine flags shared PAN numbers across multiple phone numbers, high chargeback filing rates, and identity anomalies.
+
+29
+00:03:48.500 --> 00:03:57.500
+With one click, the platform generates a regulatory-compliant FIU-IND Suspicious Transaction Report dossier for law enforcement submission.
+
+30
+00:03:59.500 --> 00:04:03.500
+Now, let us open the Agentic AI Assistant.
+
+31
+00:04:04.000 --> 00:04:09.500
+The agent connects conversational natural language to our deterministic graph engine.
+
+32
+00:04:10.000 --> 00:04:17.000
+We ask: Which merchant category has the highest chargeback-to-transaction ratio this quarter?
+
+33
+00:04:17.500 --> 00:04:25.500
+The agent computes the grounded result directly on trusted data: Apparel at 30.34% with 44 chargebacks on 145 transactions, and renders an interactive chart.
+
+34
+00:04:26.000 --> 00:04:30.000
+Next, we ask: Why is it important?
+
+35
+00:04:30.500 --> 00:04:38.000
+The agent provides the strategic business explanation: Apparel exceeds the 1.0% NPCI regulatory threshold by 30 times.
+
+36
+00:04:38.500 --> 00:04:45.500
+It suffers from high-liquidity stolen card testing and requires immediate rolling reserve protection.
+
+37
+00:04:47.500 --> 00:04:52.500
+Security and reliability are built into every layer.
+
+38
+00:04:53.000 --> 00:05:00.000
+When we ask an out-of-domain query like: Who is the Prime Minister of India?, the agent immediately triggers application-level domain guardrails and refuses.
+
+39
+00:05:00.500 --> 00:05:08.000
+The platform enforces multi-tier prompt injection protection, an OpenRouter multi-model cascade with automatic free-tier fallback.
+
+40
+00:05:08.500 --> 00:05:14.000
+And a deterministic mathematical engine that eliminates hallucinations.
+
+41
+00:05:15.500 --> 00:05:24.500
+To conclude: We transformed unreliable payment data into an auditable fraud intelligence system that does not just report risk, it helps investigators find and understand it.
+
+42
+00:05:25.000 --> 00:05:27.500
+Thank you.
