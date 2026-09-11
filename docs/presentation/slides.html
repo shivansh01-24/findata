@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinData: UPI Fraud Intelligence Platform - Judge Presentation</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #0b0f19;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    .deck-container {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 3.5rem 5rem;
+      background: radial-gradient(circle at top right, #1e1b4b 0%, #0b0f19 60%, #050811 100%);
+      position: relative;
+    }
+    .slide.active {
+      display: flex;
+    }
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+      padding-bottom: 1.25rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-blue {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .badge-amber {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .badge-emerald {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .slide-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-top: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .slide-subtitle {
+      font-size: 1.15rem;
+      color: #94a3b8;
+      margin-top: 0.25rem;
+    }
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: 1.5rem 0;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .card {
+      background: rgba(17, 23, 38, 0.85);
+      border: 1px solid rgba(34, 47, 76, 0.9);
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    .card-highlight {
+      border-color: rgba(59, 130, 246, 0.5);
+      background: linear-gradient(145deg, rgba(30, 41, 70, 0.9), rgba(17, 23, 38, 0.9));
+    }
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #60a5fa;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-text {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.55;
+    }
+    .stat-number {
+      font-size: 2.75rem;
+      font-weight: 900;
+      color: #f8fafc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+    table.data-table th {
+      background: rgba(30, 41, 70, 0.8);
+      color: #94a3b8;
+      padding: 0.6rem 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #222f4c;
+    }
+    table.data-table td {
+      padding: 0.6rem 0.85rem;
+      border-bottom: 1px solid rgba(34, 47, 76, 0.6);
+      color: #e2e8f0;
+    }
+    table.data-table tr.top-rank {
+      background: rgba(245, 158, 11, 0.12);
+      font-weight: 700;
+      color: #fbbf24;
+    }
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(34, 47, 76, 0.6);
+      padding-top: 1rem;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    .nav-controls {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 2rem;
+      display: flex;
+      gap: 0.5rem;
+      z-index: 50;
+    }
+    .nav-btn {
+      background: rgba(30, 41, 70, 0.8);
+      border: 1px solid #3b82f6;
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover {
+      background: #2563eb;
+    }
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+      transition: width 0.3s ease;
+      z-index: 100;
+    }
+
+    @media print {
+      body, .deck-container {
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: #0b0f19 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .slide {
+        display: flex !important;
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+        height: 100vh !important;
+        width: 100vw !important;
+        padding: 3rem 4rem !important;
+      }
+      .nav-controls, .progress-bar {
+        display: none !important;
+      }
+      @page {
+        size: 16in 9in landscape;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+
+  <div class="deck-container" id="deck">
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide active" id="slide-1">
+      <div class="slide-header">
+        <span class="badge badge-blue">TransOrg AgentIQ Datathon • Track 1 (FinTech & BFSI)</span>
+        <span class="badge badge-emerald">Production Verified</span>
+      </div>
+      <div class="slide-content" style="text-align: center; align-items: center;">
+        <div style="font-size: 4rem; font-weight: 900; background: linear-gradient(135deg, #60a5fa, #a78bfa, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          FinData
+        </div>
+        <div style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-top: 0.5rem;">
+          UPI Fraud Intelligence & Regulatory Surveillance Platform
+        </div>
+        <div style="max-width: 800px; color: #94a3b8; font-size: 1.15rem; margin-top: 1.25rem; line-height: 1.6;">
+          An enterprise-grade platform transforming messy, disconnected payment logs into verifiable fraud ring intelligence, multivariate risk models, and grounded agentic AI.
+        </div>
+        <div class="grid-4" style="margin-top: 2.5rem; width: 100%; max-width: 1100px;">
+          <div class="card">
+            <div class="stat-number" style="color: #60a5fa;">20,000</div>
+            <div class="stat-label">Trusted Transactions</div>
+          </div>
+          <div class="card">
+            <div class="stat-number" style="color: #a78bfa;">2,800</div>
+            <div class="stat-label">Validated Disputes</div>
+          </div>
+          <div class="card">
+            <div class="stat-number" style="color: #f59e0b;">295</div>
+            <div class="stat-label">Detected Fraud Rings</div>
+          </div>
+          <div class="card">
+            <div class="stat-number" style="color: #34d399;">42/42</div>
+            <div class="stat-label">Automated Tests Passed</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>TransOrg AgentIQ Datathon Track 1 • Final Submission</span>
+        <span>Slide 1 / 10</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Problem Statement -->
+    <div class="slide" id="slide-2">
+      <div class="slide-header">
+        <div>
+          <span class="badge badge-amber">The Challenge</span>
+          <h2 class="slide-title">Real-World UPI Telemetry Chaos</h2>
+          <p class="slide-subtitle">Raw payment data is corrupted, disconnected, and weaponized by fraud syndicates</p>
+        </div>
+        <span class="badge badge-blue">Forensic Ingestion</span>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">🚨 The Raw Source Data Breakdown</div>
+            <ul style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.7; margin-left: 1.5rem; margin-top: 0.5rem;">
+              <li><strong>20,400 Raw UPI Transactions:</strong> Spaced UTRs (1,881), negative refund amounts (429), 14 status casing variants, and 400 exact row duplicates.</li>
+              <li><strong>36,400 Raw Customer KYC Records:</strong> 4,235 duplicate IDs with conflicting PANs, Aadhaars, and KYC statuses across multiple rows.</li>
+              <li><strong>6,210 Raw Merchant Masters:</strong> 1,127 duplicate IDs with conflicting bank accounts, missing MCCs, and trade name discrepancies.</li>
+              <li><strong>2,884 Raw Chargeback Logs:</strong> 219 unlinked orphan disputes and 183 empty disputed amount values.</li>
+            </ul>
+          </div>
+          <div class="card card-highlight">
+            <div class="card-title">⚡ Why Generic Pipelines Fail</div>
+            <div class="card-text" style="font-size: 0.95rem; line-height: 1.65;">
+              <p><strong>The Naïve Approach:</strong> Generic pipelines either blindly drop dirty rows (distorting financial volume) or run unverified dashboards on corrupted identifiers.</p>
+              <p style="margin-top: 0.75rem;"><strong>The FinData Approach:</strong> We enforce <em>Preservation over Deletion</em>. Every anomaly is standardized, scored with resolution confidence, linked via foreign keys, and cataloged into an immutable audit diff matrix.</p>
+              <p style="margin-top: 0.75rem;"><strong>The Syndicate Reality:</strong> Fraudsters exploit multi-entity setups—319 shared Aadhaar clusters and 71 shared settlement bank accounts connect seemingly independent accounts into organized rings.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FinData • UPI Fraud Intelligence Platform</span>
+        <span>Slide 2 / 10</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Data Rescue Architecture -->
+    <div class="slide" id="slide-3">
+      <div class="slide-header">
+        <div>
+          <span class="badge badge-emerald">Data Rescue Layer</span>
+          <h2 class="slide-title">Forensic Entity Resolution & Reconciliation Diff</h2>
+          <p class="slide-subtitle">Multi-stage deterministic standardizers preserving 100% data auditability</p>
+        </div>
+        <span class="badge badge-blue">Data Quality</span>
+      </div>
+      <div class="slide-content">
+        <div class="grid-3">
+          <div class="card">
+            <div class="stat-number" style="color: #60a5fa; font-size: 2.2rem;">36.4k → 28.9k</div>
+            <div class="stat-label">Golden Customers Rescued</div>
+            <p class="card-text" style="margin-top: 0.75rem; font-size: 0.85rem;">
+              Hierarchy-based scoring resolving 4,235 duplicate IDs. Priority given to verified KYC status, valid PAN checksums, and 12-digit Aadhaar formats.
+            </p>
+          </div>
+          <div class="card">
+            <div class="stat-number" style="color: #a78bfa; font-size: 2.2rem;">6.2k → 4.3k</div>
+            <div class="stat-label">Golden Merchants Rescued</div>
+            <p class="card-text" style="margin-top: 0.75rem; font-size: 0.85rem;">
+              Consolidated 1,127 merchant ID conflicts. Rescued trade names, canonical categories, normalized MCCs, and active settlement bank accounts.
+            </p>
+          </div>
+          <div class="card">
+            <div class="stat-number" style="color: #34d399; font-size: 2.2rem;">20.4k → 20.0k</div>
+            <div class="stat-label">Trusted UPI Transactions</div>
+            <p class="card-text" style="margin-top: 0.75rem; font-size: 0.85rem;">
+              Removed 400 exact row duplicates. Classified negative amounts as refunds, stripped UTR spacing, and linked customer and merchant foreign keys.
+            </p>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 1.5rem; background: rgba(30, 27, 75, 0.4); border-color: rgba(99, 102, 241, 0.4);">
+          <div class="card-title" style="color: #a5b4fc; font-size: 1rem;">🔍 Live Benchmark Curated Case: MCH7912 (6-Row Conflict)</div>
+          <div class="card-text" style="font-size: 0.88rem;">
+            Raw merchant arrived across 6 conflicting rows with two different bank accounts (<code>ZNNS...</code> vs <code>XOLJ...</code>) and divergent statuses (<em>Active, Enabled, Suspended</em>). Our engine selected the highest-fidelity active record with valid settlement banking and mapped all 6 raw records in an interactive side-by-side audit matrix.
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FinData • UPI Fraud Intelligence Platform</span>
+        <span>Slide 3 / 10</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Authoritative Analytical Ground Truth -->
+    <div class="slide" id="slide-4">
+      <div class="slide-header">
+        <div>
+          <span class="badge badge-amber">Official Benchmark Finding</span>
+          <h2 class="slide-title">Merchant Category Chargeback Ratio Distribution</h2>
+          <p class="slide-subtitle">Dynamically computed from 20,000 trusted transactions and 2,800 validated chargebacks</p>
+        </div>
+        <span class="badge badge-emerald">Single Source of Truth</span>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="padding: 1.25rem;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Merchant Category</th>
+                  <th>Txns</th>
+                  <th>CBs</th>
+                  <th>Dispute Ratio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="top-rank">
+                  <td>#1</td>
+                  <td><strong>Apparel</strong></td>
+                  <td>145</td>
+                  <td>44</td>
+                  <td><strong>30.34%</strong></td>
+                </tr>
+                <tr>
+                  <td>#2</td>
+                  <td>Miscellaneous Retail</td>
+                  <td>1,632</td>
+                  <td>308</td>
+                  <td>18.87%</td>
+                </tr>
+                <tr>
+                  <td>#3</td>
+                  <td>Department Store</td>
+                  <td>173</td>
+                  <td>31</td>
+                  <td>17.92%</td>
+                </tr>
+                <tr>
+                  <td>#4</td>
+                  <td>Transportation</td>
+                  <td>2,975</td>
+                  <td>443</td>
+                  <td>14.89%</td>
+                </tr>
+                <tr>
+                  <td>#5</td>
+                  <td>Telecom</td>
+                  <td>126</td>
+                  <td>18</td>
+                  <td>14.29%</td>
+                </tr>
+                <tr>
+                  <td>#6</td>
+                  <td>Restaurant</td>
+                  <td>3,000</td>
+                  <td>419</td>
+                  <td>13.97%</td>
+                </tr>
+                <tr>
+                  <td>#7</td>
+                  <td>Grocery</td>
+                  <td>5,840</td>
+                  <td>767</td>
+                  <td>13.13%</td>
+                </tr>
+                <tr>
+                  <td>#8</td>
+                  <td>Pharmacy</td>
+                  <td>3,004</td>
+                  <td>385</td>
+                  <td>12.82%</td>
+                </tr>
+                <tr>
+                  <td>#9</td>
+                  <td>Hotel & Lodging</td>
+                  <td>2,964</td>
+                  <td>369</td>
+                  <td>12.45%</td>
+                </tr>
+                <tr>
+                  <td>#10</td>
+                  <td>Books & Stationery</td>
+                  <td>141</td>
+                  <td>16</td>
+                  <td>11.35%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card card-highlight">
+            <div class="card-title">🎯 Benchmark Executive Insights</div>
+            <div class="card-text" style="font-size: 0.92rem; line-height: 1.6;">
+              <p><strong>Highest Dispute Rate:</strong> <strong>Apparel (30.34%)</strong> exhibits the platform's highest dispute density—more than double the platform average of 14.00%.</p>
+              <p style="margin-top: 0.6rem;"><strong>Highest Absolute Loss Volume:</strong> <strong>Grocery</strong> records ₹2.66M disputed across 767 chargebacks, followed by <strong>Transportation</strong> (₹1.38M) and <strong>Restaurant</strong> (₹1.36M).</p>
+              <p style="margin-top: 0.6rem;"><strong>Highest Total Chargeback Count:</strong> <strong>Grocery</strong> (767) and <strong>Transportation</strong> (443).</p>
+              <p style="margin-top: 0.6rem;"><strong>Policy Takeaway:</strong> Apparel requires immediate mandatory delivery telemetry verification and lower chargeback tolerance thresholds.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FinData • UPI Fraud Intelligence Platform</span>
+        <span>Slide 4 / 10</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Graph AI & Fraud Rings -->
+    <div class="slide" id="slide-5">
+      <div class="slide-header">
+        <div>
+          <span class="badge badge-blue">Graph Intelligence</span>
+          <h2 class="slide-title">Multi-Hop Fraud Rings & Syndicate Topology</h2>
+          <p class="slide-subtitle">Uncovering 295 coordinated networks across 3 distinct fraud typologies</p>
+        </div>
+        <span class="badge badge-amber">Network Analytics</span>
+      </div>
+      <div class="slide-content">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title" style="color: #ef4444;">🏦 Shared Settlement Mules</div>
+            <div class="stat-number" style="font-size: 2rem; color: #f87171;">71 Rings</div>
+            <p class="card-text" style="margin-top: 0.5rem; font-size: 0.85rem;">
+              Multiple merchant entities routing settlement revenue into single bank accounts. E.g., <code>RING-SETTLE-001</code> links 6 storefronts funneling into account <code>XXXX0207</code>.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: #f59e0b;">📈 Bust-Out Merchants</div>
+            <div class="stat-number" style="font-size: 2rem; color: #fbbf24;">184 Rings</div>
+            <p class="card-text" style="margin-top: 0.5rem; font-size: 0.85rem;">
+              Commercial storefronts with rapid ticket size escalation (>2.5x declared baseline) followed by extreme chargeback surges before account abandonment.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: #8b5cf6;">🪪 Synthetic Identity Clusters</div>
+            <div class="stat-number" style="font-size: 2rem; color: #c084fc;">40 Rings</div>
+            <p class="card-text" style="margin-top: 0.5rem; font-size: 0.85rem;">
+              Multiple customer profiles sharing single Aadhaar/PAN credentials conducting circular money flows and coordinated repeat disputes.
+            </p>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 1.5rem;">
+          <div class="card-title">🕸️ Interactive Canvas Network Visualizer</div>
+          <p class="card-text" style="font-size: 0.9rem;">
+            Investigators explore multi-hop connections with physics layouts, interactive drag-and-drop node inspection, typology filtering, and 1-click generation of statutory investigation dossiers.
+          </p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FinData • UPI Fraud Intelligence Platform</span>
+        <span>Slide 5 / 10</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Merchant & Customer Risk Surveillance -->
+    <div class="slide" id="slide-6">
+      <div class="slide-header">
+        <div>
+          <span class="badge badge-blue">Risk Surveillance</span>
+          <h2 class="slide-title">Multivariate Merchant & Customer Risk Models</h2>
+          <p class="slide-subtitle">0–100 composite risk scoring combining transaction anomalies and network topology</p>
+        </div>
+        <span class="badge badge-emerald">Surveillance Engine</span>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">🏪 Merchant Risk Index (0–100)</div>
+            <div class="card-text" style="font-size: 0.9rem; line-height: 1.6;">
+              <ul style="margin-left: 1.25rem;">
+                <li><strong>Dispute Rate vs Category Cap (35 pts):</strong> Penalizes excessive chargeback velocity.</li>
+                <li><strong>Gross Disputed Volume (25 pts):</strong> Evaluates total financial exposure.</li>
+                <li><strong>Ticket Size Anomaly (20 pts):</strong> Compares actual ticket size against declared onboarding baseline.</li>
+                <li><strong>Shared Mule Account Flag (20 pts):</strong> Immediate trigger if banking account is shared.</li>
+              </ul>
+              <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(239, 68, 68, 0.1); border-radius: 0.5rem; border: 1px solid rgba(239, 68, 68, 0.3);">
+                <strong>Top Merchant Flagged:</strong> <code>MCH9291</code> (Score: 95.0, 78 disputes, 29.5% dispute rate).
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">👤 Customer & Identity Risk Index (0–100)</div>
+            <div class="card-text" style="font-size: 0.9rem; line-height: 1.6;">
+              <ul style="margin-left: 1.25rem;">
+                <li><strong>Repeat Dispute Abuse (40 pts):</strong> Flags accounts with >3 disputes or >50% dispute-to-transaction ratio.</li>
+                <li><strong>Shared Aadhaar Cluster (25 pts):</strong> Identifies synthetic identity syndicates (319 clusters).</li>
+                <li><strong>Conflicting KYC Record (20 pts):</strong> Discrepancies across duplicate KYC submissions.</li>
+                <li><strong>Rejected KYC Status (15 pts):</strong> Unverified or rejected onboarding telemetry.</li>
+              </ul>
+              <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(168, 85, 247, 0.1); border-radius: 0.5rem; border: 1px solid rgba(168, 85, 247, 0.3);">
+                <strong>Top Customer Flagged:</strong> <code>USR97772</code> (16 chargebacks across 18 transactions).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FinData • UPI Fraud Intelligence Platform</span>
+        <span>Slide 6 / 10</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Policy Simulation & Regulatory Compliance -->
+    <div class="slide" id="slide-7">
+      <div class="slide-header">
+        <div>
+          <span class="badge badge-emerald">Compliance & Policy</span>
+          <h2 class="slide-title">Risk Policy Simulator & Regulatory STR Dossiers</h2>
+          <p class="slide-subtitle">Interactive 'What-If' threshold modeling and standardized FIU-IND pre-filing packages</p>
+        </div>
+        <span class="badge badge-blue">Regulatory Alignment</span>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">🎛️ Interactive Risk Policy Simulator</div>
+            <div class="card-text" style="font-size: 0.9rem; line-height: 1.6;">
+              <p>Risk officers can adjust critical portfolio parameters dynamically:</p>
+              <ul style="margin-left: 1.25rem; margin-top: 0.4rem;">
+                <li><strong>Dispute Rate Cap:</strong> 5% to 50% (Default: 20%)</li>
+                <li><strong>Ticket Size Multiplier:</strong> 1.0x to 4.0x (Default: 2.0x)</li>
+                <li><strong>Mule Sharing Threshold:</strong> 1 to 5+ merchants (Default: 2)</li>
+              </ul>
+              <p style="margin-top: 0.75rem;">
+                <strong>Real-Time Delta:</strong> Calculates exact portfolio impact—merchants flagged, dispute volume contained, and total platform dispute capture rate.
+              </p>
+            </div>
+          </div>
+          <div class="card card-highlight">
+            <div class="card-title">📜 Regulatory STR Investigation Dossiers</div>
+            <div class="card-text" style="font-size: 0.9rem; line-height: 1.6;">
+              <p>Aligned with <strong>PMLA Section 12</strong> & <strong>FIU-IND FINnet 2.0</strong> guidelines:</p>
+              <ul style="margin-left: 1.25rem; margin-top: 0.4rem;">
+                <li><strong>Automated Dossiers:</strong> Generated for all 295 rings and high-risk merchants.</li>
+                <li><strong>Complete Evidence Trail:</strong> Itemized transaction logs with UTRs, timestamps, and amounts.</li>
+                <li><strong>Dual Export:</strong> Formatted Legal Markdown and Structured JSON for machine ingestion.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FinData • UPI Fraud Intelligence Platform</span>
+        <span>Slide 7 / 10</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Agentic AI Architecture -->
+    <div class="slide" id="slide-8">
+      <div class="slide-header">
+        <div>
+          <span class="badge badge-blue">Agentic AI</span>
+          <h2 class="slide-title">Domain-Guarded Grounded Agentic AI</h2>
+          <p class="slide-subtitle">Zero-hallucination factual extraction powered by OpenRouter Free Tier & Deterministic Fallback</p>
+        </div>
+        <span class="badge badge-emerald">AI Architecture</span>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">🛡️ Multi-Tier Security & Fallback Pipeline</div>
+            <div style="font-family: monospace; font-size: 0.85rem; color: #93c5fd; background: rgba(15, 23, 42, 0.8); padding: 1rem; border-radius: 0.5rem; line-height: 1.7;">
+              [User Prompt]<br>
+              &nbsp;&nbsp;↓<br>
+              [Domain Guard] → Intercepts Out-of-Domain & Injections<br>
+              &nbsp;&nbsp;↓<br>
+              [Deterministic Engine] → Extracts Verified Facts from Data<br>
+              &nbsp;&nbsp;↓<br>
+              [OpenRouter Free Tier] → Finance LLM Synthesizes Executive Brief<br>
+              &nbsp;&nbsp;↓<br>
+              [Deterministic Fallback] → 0ms Failover on Upstream Outages
+            </div>
+          </div>
+          <div class="card card-highlight">
+            <div class="card-title">⚡ Live Benchmark Verification Highlights</div>
+            <div class="card-text" style="font-size: 0.9rem; line-height: 1.6;">
+              <ul style="margin-left: 1.25rem;">
+                <li><strong>Benchmark Query:</strong> Correctly answers <em>"Apparel — 30.34%"</em> with full comparative category context.</li>
+                <li><strong>Phrasing Invariance:</strong> 4/4 semantic variations map to canonical analytical facts.</li>
+                <li><strong>Out-of-Domain Refusal:</strong> 100% blocked at application level.</li>
+                <li><strong>Prompt Injection Defense:</strong> System overrides and DAN attacks safely neutralized.</li>
+                <li><strong>Credential Safety:</strong> Zero API keys exposed in client responses or git history.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FinData • UPI Fraud Intelligence Platform</span>
+        <span>Slide 8 / 10</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: Engineering Excellence -->
+    <div class="slide" id="slide-9">
+      <div class="slide-header">
+        <div>
+          <span class="badge badge-emerald">Verification</span>
+          <h2 class="slide-title">Engineering Excellence & Test Verification</h2>
+          <p class="slide-subtitle">100% test pass rate across unit, integration, and browser automation suites</p>
+        </div>
+        <span class="badge badge-blue">Production Ready</span>
+      </div>
+      <div class="slide-content">
+        <div class="grid-4">
+          <div class="card" style="text-align: center;">
+            <div class="stat-number" style="color: #34d399;">42 / 42</div>
+            <div class="stat-label">Pytest Tests Passed</div>
+            <p class="card-text" style="font-size: 0.8rem; margin-top: 0.5rem;">Unit, standardizer, risk engine, and agent tests</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div class="stat-number" style="color: #60a5fa;">13 / 13</div>
+            <div class="stat-label">Smoke Tests Passed</div>
+            <p class="card-text" style="font-size: 0.8rem; margin-top: 0.5rem;">End-to-end API and SPA verification</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div class="stat-number" style="color: #a78bfa;">8 / 8</div>
+            <div class="stat-label">Playwright Visuals</div>
+            <p class="card-text" style="font-size: 0.8rem; margin-top: 0.5rem;">1920x1080 automated visual capture proofs</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div class="stat-number" style="color: #f59e0b;">0 ms</div>
+            <div class="stat-label">Outage Downtime</div>
+            <p class="card-text" style="font-size: 0.8rem; margin-top: 0.5rem;">Deterministic fallback on total LLM failure</p>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 1.5rem;">
+          <div class="card-title">🚀 Modern Enterprise Tech Stack</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem;">
+            <span class="badge badge-blue">Python 3.12</span>
+            <span class="badge badge-blue">FastAPI</span>
+            <span class="badge badge-blue">Pandas & NumPy</span>
+            <span class="badge badge-blue">React 19 & TypeScript</span>
+            <span class="badge badge-blue">Tailwind CSS</span>
+            <span class="badge badge-blue">Recharts & Canvas Graph</span>
+            <span class="badge badge-blue">Playwright Automation</span>
+            <span class="badge badge-blue">OpenRouter Free Tier</span>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FinData • UPI Fraud Intelligence Platform</span>
+        <span>Slide 9 / 10</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: Conclusion -->
+    <div class="slide" id="slide-10">
+      <div class="slide-header">
+        <span class="badge badge-blue">Conclusion</span>
+        <span class="badge badge-emerald">Ready for Evaluation</span>
+      </div>
+      <div class="slide-content" style="text-align: center; align-items: center;">
+        <div style="font-size: 3rem; font-weight: 900; color: #ffffff;">
+          From Unreliable Payment Data to Auditable Intelligence
+        </div>
+        <div style="max-width: 850px; color: #94a3b8; font-size: 1.2rem; margin-top: 1.5rem; line-height: 1.7;">
+          <em>"FinData doesn't just display data—it transforms raw chaos into an auditable, regulatory-aligned fraud intelligence platform that actively helps investigators detect, understand, and contain financial crime."</em>
+        </div>
+        <div class="card" style="margin-top: 2.5rem; max-width: 900px; text-align: left;">
+          <div class="card-title" style="color: #34d399;">🏆 Key Competition Deliverables Ready:</div>
+          <ul style="color: #cbd5e1; font-size: 1rem; line-height: 1.7; margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li><strong>Public GitHub Repository:</strong> Clean git history, full documentation, zero secret leaks.</li>
+            <li><strong>Authoritative Ground Truth:</strong> Single source of truth across all 20,000 transactions and 2,800 chargebacks.</li>
+            <li><strong>Statutory STR Dossiers:</strong> Automated pre-filing compliance packages aligned with FIU-IND guidelines.</li>
+            <li><strong>Grounded Agentic AI:</strong> Invariant benchmark answers (Apparel: 30.34%) with robust security guardrails.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>TransOrg AgentIQ Datathon Track 1 • Thank You!</span>
+        <span>Slide 10 / 10</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="nav-controls">
+    <button class="nav-btn" onclick="prevSlide()">◀ Prev</button>
+    <button class="nav-btn" onclick="nextSlide()">Next ▶</button>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 10;
+
+    function showSlide(index) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+      currentSlide = index;
+
+      for (let i = 1; i <= totalSlides; i++) {
+        const el = document.getElementById('slide-' + i);
+        if (el) {
+          el.classList.toggle('active', i === currentSlide);
+        }
+      }
+
+      const progress = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        showSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        showSlide(currentSlide - 1);
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      }
+    });
+
+    showSlide(1);
+  </script>
+</body>
+</html>
