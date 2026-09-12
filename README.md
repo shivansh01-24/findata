@@ -16,7 +16,8 @@ Messy Data  ──►  Data Rescue  ──►  Trusted Analytics  ──►  Fra
 ```
 
 ### 🏆 Datathon Submission Deliverables
-- 📹 **[Platform Video Walkthrough](docs/videos/findata_platform_demo.mp4)** (`1080p MP4`, Full Platform Walkthrough)
+- 🌐 **[Live Interactive Web Application](https://payday-develops-asian-includes.trycloudflare.com)** (Public Cloudflare Live Deployment)
+- 📹 **[Platform Video Walkthrough](docs/videos/findata_platform_demo.mp4)** (`1080p MP4` with Burned-In Subtitles)
 - 📊 **[Judge Presentation Deck (PDF)](docs/presentation/FinData_Track1_Judge_Presentation.pdf)** (16:9 Landscape Pitch Deck)
 - 🖥️ **[Interactive Presentation Slides](docs/presentation/slides.html)** (Standalone Dark FinTech HTML5 Deck)
 - 📑 **[Data Quality & Reconciliation Report](DATA_QUALITY_REPORT.md)** (Forensic audit of 36.4K KYC, 6.2K merchants, 20.4K txns, 2.88K CBs)
@@ -52,8 +53,8 @@ The platform includes 6 production-grade modules and an autonomous AI agent, ver
 *Side-by-side raw versus golden entity diff matrix showing exact attribute canonicalization, conflict confidence scoring, and audit traces for curated benchmark cases (e.g. MCH7912 6-row conflict).*
 ![Data Rescue Audit Diff](docs/screenshots/06_data_rescue_audit_diff.png)
 
-### 7. FIU-IND Suspicious Transaction Report (STR) Dossier
-*Automated regulatory reporting complying with PMLA 2002 Section 12 and RBI Master Directions. Produces court-admissible Markdown briefs and FINnet 2.0-compliant machine JSON with 1-click download.*
+### 7. FIU-IND STR-Style Investigation Dossier
+*Automated investigation reporting structured after FIU-IND Suspicious Transaction Report (STR) formats and RBI digital payment guidelines. Generates comprehensive investigative Markdown briefs and structured machine JSON with 1-click export.*
 ![FIU-IND STR Dossier](docs/screenshots/07_fiu_ind_str_dossier.png)
 
 ### 8. Domain-Constrained Agentic Graph AI
@@ -248,12 +249,12 @@ The interactive simulation engine (`backend/intelligence/policy_simulator.py`) e
 
 ---
 
-## 12. FIU-IND STR Regulatory Dossier Generator
+## 12. FIU-IND STR-Style Investigation Dossier Generator
 
-The statutory reporting engine (`backend/intelligence/fiu_str_generator.py`) complies with **PMLA 2002 Section 12** and **RBI Master Directions on Fraud Reporting**:
+The investigation reporting engine (`backend/intelligence/fiu_str_generator.py`) generates structured Suspicious Transaction Report (STR) dossiers modeled after FIU-IND and RBI reporting patterns:
 - **Dual Output Modes**:
-  1. **Court-Admissible Legal Markdown Brief**: Complete with reporting entity credentials, suspect entity tables, grounding transaction evidence, typology classification, and investigator sign-off.
-  2. **FINnet 2.0 Machine JSON**: Structured telemetry schema ready for automated regulatory batch submission.
+  1. **Investigative Markdown Brief**: Structured with reporting entity details, suspect entity profiles, transaction evidence trails, typology classifications (Mule, Synthetic Identity, Bust-Out), and recommended operational directives.
+  2. **Structured Machine JSON**: Standardized telemetry schema ready for automated compliance batch processing.
 - Available for all 295 detected fraud rings and any individual high-risk merchant with 1-click modal viewing and download.
 
 ---
@@ -469,32 +470,32 @@ findata/
 
 ---
 
-## 19. Datathon Judging Rubric Compliance (170 / 170 Points)
+## 19. Datathon Judging Rubric Compliance (Designed to Address All 170 Available Points)
 
-The submission satisfies all 4 Gates, including mandatory sanity criteria and advanced bonuses.
+The submission is structured to address all 4 Gates, including mandatory sanity criteria and advanced bonuses.
 
 | Gate | Area | Core Points | Bonus Points | Max Score | Implementation Evidence & Verification |
 |---|---|:---:|:---:|:---:|---|
-| **Gate 1** | **Compliance & Sanity** | **10** | **+10** | **20** | **Pass (100% Compliant)** |
+| **Gate 1** | **Compliance & Sanity** | **10** | **+10** | **20** | **100% Compliant (Gate 1 Passed)** |
 | 1.1 | Public Accessible GitHub | Mandatory | — | — | Publicly hosted repository at [`https://github.com/shivansh01-24/findata`](https://github.com/shivansh01-24/findata). |
 | 1.2 | Well-Formatted README | Mandatory | — | — | Explains project architecture, business rationale, pipeline execution, prerequisites, and reproduction steps. |
 | 1.3 | Data Dictionary | Mandatory | — | — | Complete schema definitions, canonical types, and transformation rules documented in [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md). |
 | 1.4 | Proof of Cleaning | Mandatory | — | — | Forensic metrics: KYC (36,400 → 28,920 golden), Merchants (6,210 → 4,343 golden), Txns (20,400 → 20,000 trusted), Chargebacks (2,884 → 2,800 validated) in [`DATA_QUALITY_REPORT.md`](DATA_QUALITY_REPORT.md). |
 | 1.5 | *Self-Developed README Bonus* | — | **+10** | **+10** | Comprehensive human-crafted architectural guide with diagrams, visual proofs, and mathematical rigor. |
-| **Gate 2** | **Data Engineering & Rescue** | **30** | **+10** | **40** | **Pass (100% Compliant)** |
+| **Gate 2** | **Data Engineering & Rescue** | **30** | **+10** | **40** | **30 Core + 10 Bonus Addressed** |
 | 2.1 | Missing Values & Duplicates | **10** | — | **10** | Missing UTRs (1,024 flagged), missing MCCs (514 imputed), blank dispute amounts (183 imputed from txns); 4-tier entity resolution preserves records rather than blind deletion. |
 | 2.2 | Standardization | **10** | — | **10** | Rescued ID prefixes/whitespace, unified 14 status variants, parsed Unix/ISO timestamps, validated PAN/Aadhaar formats, and consolidated 82+ messy category strings. |
 | 2.3 | Reproducibility | **10** | — | **10** | Fully automated pipeline (`python -m backend.pipeline.build_trusted_layer`); clean modular code; 100% deterministic transformations without manual edits. |
 | 2.4 | *Cleaning Decision Comments Bonus* | — | **+10** | **+10** | Extensive docstrings and architectural rationale across `standardizers.py`, `entity_resolution.py`, and `build_trusted_layer.py` explaining the business logic behind every transformation. |
-| **Gate 3** | **Dashboard & Business Value** | **40** | **+10** | **50** | **Pass (100% Compliant)** |
+| **Gate 3** | **Dashboard & Business Value** | **40** | **+10** | **50** | **40 Core + 10 Bonus Addressed** |
 | 3.1 | Interactivity & UX | **15** | — | **15** | 6 production views (Executive Overview, Fraud Rings, Merchant Risk, Customer Risk, Risk Simulator, Data Rescue Audit) with dynamic cross-filtering and drilldowns. |
-| 3.2 | Core KPIs | **15** | — | **15** | Complete financial telemetry: Gross Volume (₹249.77M), Success Rate (88.46%), Dispute Rate (14.00%), Top Category (Apparel @ 30.34%), Risk Segmentations. |
-| 3.3 | Business Storytelling | **10** | — | **10** | Structured 4-stage narrative: (1) Platform Volume → (2) Category & Merchant Risk Vectors → (3) Network Ring Syndicates → (4) Court-admissible FIU-IND STR generation. |
+| 3.2 | Core KPIs | **15** | — | **15** | Complete financial telemetry: Gross Volume (₹249.77M), Success Rate (85.27%), Dispute Rate (14.00%), Top Category (Apparel @ 30.34%), Risk Segmentations. |
+| 3.3 | Business Storytelling | **10** | — | **10** | Structured 4-stage narrative: (1) Platform Volume → (2) Category & Merchant Risk Vectors → (3) Network Ring Syndicates → (4) STR-style investigation dossier generation. |
 | 3.4 | *Innovative Dashboard Bonus* | — | **+10** | **+10** | Interactive Canvas Network Graph with physics simulation, Forensic Entity Reconciliation Diff Matrix with curated cases, and Dynamic Risk Policy Simulator. |
-| **Gate 4** | **Excellence & AI** | **30** | **+30** | **60** | **Pass (100% Compliant)** |
-| 4.1 | Code Elegance & Architecture | **15** | — | **15** | Clean modular architecture (`backend/pipeline/`, `backend/intelligence/`, `backend/agent/`, `frontend/src/`); FastAPI REST + React 18 TypeScript; 42/42 passing pytest suite. |
+| **Gate 4** | **Excellence & AI** | **30** | **+30** | **60** | **30 Core + 30 Bonus Addressed** |
+| 4.1 | Code Elegance & Architecture | **15** | — | **15** | Clean modular architecture (`backend/pipeline/`, `backend/intelligence/`, `backend/agent/`, `frontend/src/`); FastAPI REST + React 19 TypeScript; 42/42 passing pytest suite. |
 | 4.2 | Advanced Insights | **15** | — | **15** | Graph intelligence detecting 295 fraud rings (71 Shared Mule, 185 Synthetic Identity, 39 Bust-Out), ticket size anomaly detection (>2.5x σ), and multivariate risk index. |
 | 4.3 | *Agentic NLU Bonus* | — | **+10** | **+10** | Conversational assistant supporting free-form querying with intent classification, hard domain guardrails, and prompt injection defense. |
 | 4.4 | *Dynamic Chart Rendering Bonus* | — | **+10** | **+10** | Dynamic generation of appropriate visualizations (Bar, Line, Scatter, KPI, Table) mapped to query intent (e.g. bar chart for category ratios). |
 | 4.5 | *Text Summary with Graph Bonus* | — | **+10** | **+10** | Grounded factual text narrative presented side-by-side with interactive visual graphs (e.g., Apparel = 30.34% with 44 CBs / 145 txns). |
-| **TOTAL** | **4 Evaluation Gates** | **110** | **+60** | **170** | **Maximum 170 / 170 Points Achieved** |
+| **TOTAL** | **Rubric Coverage** | **110** | **+60** | **170** | **Designed to Address All 170 Available Rubric Points** |
