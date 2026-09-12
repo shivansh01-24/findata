@@ -171,7 +171,7 @@ export const STRReportModal: React.FC<STRReportModalProps> = ({
 
         {/* Footer Note */}
         <div className="flex items-center justify-between border-t border-[#222f4c] px-6 py-3 bg-[#0c101a] text-[11px] text-slate-400">
-          <span>Official filing format compliant with FIU-IND FINnet 2.0 XML schema and RBI digital payment guidelines.</span>
+          <span>STR-style investigative format modeled after FIU-IND and RBI digital payment reporting guidelines.</span>
           <button 
             onClick={() => handleDownload('json')}
             className="text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1"

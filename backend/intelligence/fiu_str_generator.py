@@ -1,8 +1,8 @@
 """
-FIU-IND Suspicious Transaction Report (STR) & Regulatory Dossier Engine.
-Generates statutory AML/CFT case files compliant with:
-  - Prevention of Money Laundering Act (PMLA), 2002 - Section 12
-  - Financial Intelligence Unit - India (FIU-IND) Guidelines for Reporting Entities
+FIU-IND Suspicious Transaction Report (STR) Style Investigation Dossier Engine.
+Generates structured AML/CFT investigation dossiers modeled after:
+  - Prevention of Money Laundering Act (PMLA), 2002 - Section 12 typologies
+  - Financial Intelligence Unit - India (FIU-IND) Reporting Entity guidance
   - RBI Master Direction on Digital Payment Security & Fraud Risk Management
 """
 
